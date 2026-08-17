@@ -1,0 +1,374 @@
+#! /opt/homebrew/Cellar/icarus-verilog/13.0/bin/vvp
+:ivl_version "13.0 (stable)" "(v13_0)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/system.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/va_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/v2009.vpi";
+S_0x1051d2760 .scope package, "$unit" "$unit" 2 1;
+ .timescale 0 0;
+S_0x1051d1490 .scope module, "tb_sbm_geom_check" "tb_sbm_geom_check" 3 19;
+ .timescale 0 0;
+P_0xa4102a300 .param/l "AW" 1 3 39, +C4<00000000000000000000000000001100>;
+P_0xa4102a340 .param/l "BANK_DEPTH" 1 3 28, +C4<00000000000000000000000000000001000000000000>;
+P_0xa4102a380 .param/l "BAW" 1 3 34, +C4<00000000000000000000000000001111>;
+P_0xa4102a3c0 .param/l "CELLS" 1 3 23, +C4<00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011001000000000000>;
+P_0xa4102a400 .param/l "CHUNK" 1 3 27, +C4<0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000010101011>;
+P_0xa4102a440 .param/l "CW" 1 3 32, +C4<00000000000000000000000000001100>;
+P_0xa4102a480 .param/l "DCW" 1 3 36, +C4<00000000000000000000000000001111>;
+P_0xa4102a4c0 .param/l "HC" 1 3 22, +C4<0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101000000>;
+P_0xa4102a500 .param/l "HCW" 1 3 35, +C4<00000000000000000000000000001001>;
+P_0xa4102a540 .param/l "LANES" 1 3 25, +C4<00000000000000000000000000011000>;
+P_0xa4102a580 .param/l "PW" 1 3 31, +C4<00000000000000000000000000010111>;
+P_0xa4102a5c0 .param/l "QW" 1 3 37, +C4<00000000000000000000000000000110>;
+P_0xa4102a600 .param/l "RW" 1 3 33, +C4<00000000000000000000000000001100>;
+P_0xa4102a640 .param/l "SEG_BEATS" 1 3 29, +C4<00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101000>;
+P_0xa4102a680 .param/l "T" 1 3 26, +C4<00000000000000000000000000001000>;
+P_0xa4102a6c0 .param/l "TPW" 1 3 38, +C4<00000000000000000000000000010001>;
+P_0xa4102a700 .param/l "TP_MAX" 1 3 24, +C4<00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011001000000000000>;
+P_0xa4102a740 .param/l "WC" 1 3 21, +C4<0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101000000>;
+v0xa40c8c140_0 .var/i "err", 31 0;
+S_0x1051d5c90 .scope task, "chk" "chk" 3 43, 3 43 0, S_0x1051d1490;
+ .timescale 0 0;
+v0xa40c8c000_0 .var "msg", 255 0;
+v0xa40c8c0a0_0 .var "ok", 0 0;
+TD_tb_sbm_geom_check.chk ;
+    %load/vec4 v0xa40c8c0a0_0;
+    %nor/r;
+    %flag_set/vec4 8;
+    %jmp/0xz  T_0.0, 8;
+    %vpi_call/w 3 48 "$display", "GEOM FAIL: %0s", v0xa40c8c000_0 {0 0 0};
+    %load/vec4 v0xa40c8c140_0;
+    %addi 1, 0, 32;
+    %store/vec4 v0xa40c8c140_0, 0, 32;
+T_0.0 ;
+    %end;
+    .scope S_0x1051d1490;
+T_1 ;
+    %pushi/vec4 0, 0, 32;
+    %store/vec4 v0xa40c8c140_0, 0, 32;
+    %vpi_call/w 3 56 "$display", "=== SBM geometry check ===" {0 0 0};
+    %vpi_call/w 3 57 "$display", "CAM=%0dx%0d T=%0d LANES=%0d", 32'sb00000000000000000001001110001000, 32'sb00000000000000000001001110001000, 32'sb00000000000000000000000000001000, 32'sb00000000000000000000000000011000 {0 0 0};
+    %vpi_call/w 3 58 "$display", "L0=%0dx%0d  IMG(L1)=%0dx%0d  WC=%0d HC=%0d CELLS=%0d", 32'sb00000000000000000001010000000000, 32'sb00000000000000000001010000000000, 32'sb00000000000000000000101000000000, 32'sb00000000000000000000101000000000, P_0xa4102a740, P_0xa4102a4c0, P_0xa4102a3c0 {0 0 0};
+    %vpi_call/w 3 60 "$display", "TP_MAX=%0d CHUNK=%0d BANK_DEPTH=%0d SEG_BEATS=%0d", P_0xa4102a700, P_0xa4102a400, P_0xa4102a340, P_0xa4102a640 {0 0 0};
+    %vpi_call/w 3 62 "$display", "widths: PW=%0d CW=%0d RW=%0d BAW=%0d HCW=%0d DCW=%0d QW=%0d TPW=%0d AW=%0d", P_0xa4102a580, P_0xa4102a440, P_0xa4102a600, P_0xa4102a380, P_0xa4102a500, P_0xa4102a480, P_0xa4102a5c0, P_0xa4102a6c0, P_0xa4102a300 {0 0 0};
+    %vpi_call/w 3 64 "$display", "DDR LM bytes = %0d (%0d MB)", 32'sb00000011001000000000000000000000, 32'sb00000000000000000000000000110010 {0 0 0};
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1278238551, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 544108404, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 540096084, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 761359465, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1735288164, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1278238536, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 544108404, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 540096084, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 761359465, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1735288164, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 4803911, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1599545454, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1869881428, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 761359465, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1735288164, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 4803911, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1598562414, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1869881428, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 761359465, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1735288164, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 19505, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 539049248, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1278226226, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 3769992625, 0, 34;
+    %concati/vec4 2778577301, 0, 32;
+    %concati/vec4 2424348888, 0, 32;
+    %concati/vec4 3515459024, 0, 32;
+    %concati/vec4 2164613412, 0, 32;
+    %concati/vec4 2178795941, 0, 32;
+    %concati/vec4 3516170629, 0, 32;
+    %concati/vec4 610562601, 0, 30;
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 17221, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1280070432, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 557654103, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1126844483, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 2862388800, 0, 33;
+    %concati/vec4 4035006785, 0, 33;
+    %concati/vec4 4201253569, 0, 33;
+    %concati/vec4 2713828813, 0, 39;
+    %concati/vec4 2781980093, 0, 32;
+    %concati/vec4 3117187473, 0, 32;
+    %concati/vec4 3384656321, 0, 32;
+    %concati/vec4 2450473, 0, 22;
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 16961, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1313562436, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1162892360, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 540811363, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1701407784, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1128813902, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1261384233, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 66, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1095650143, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1145393236, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1210084975, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1948282991, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 2003137056, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1868963890, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 20567, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 544696676, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1952981040, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 31333, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1919888759, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1768191080, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 543387509, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1853121906, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 5525591, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 544696676, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1952981040, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 2223669928, 0, 33;
+    %concati/vec4 2789243968, 0, 32;
+    %concati/vec4 3369392256, 0, 33;
+    %concati/vec4 2701484324, 0, 32;
+    %concati/vec4 2173033905, 0, 32;
+    %concati/vec4 2511897021, 0, 32;
+    %concati/vec4 3650472345, 0, 32;
+    %concati/vec4 745502505, 0, 30;
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %pushi/vec4 0, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 76, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1293972069, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1734963054, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 543520867, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1701143667, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 540297026, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xa40c8c0a0_0, 0, 1;
+    %pushi/vec4 5718831, 0, 32; draw_string_vec4
+    %pushi/vec4 1212358757, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 2019779941, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1679831346, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 761424244, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 543713652, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 544235875, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %pushi/vec4 1802071655, 0, 32; draw_string_vec4
+    %concat/vec4; draw_string_vec4
+    %store/vec4 v0xa40c8c000_0, 0, 256;
+    %fork TD_tb_sbm_geom_check.chk, S_0x1051d5c90;
+    %join;
+    %load/vec4 v0xa40c8c140_0;
+    %cmpi/e 0, 0, 32;
+    %jmp/0xz  T_1.0, 4;
+    %vpi_call/w 3 92 "$display", "==== GEOM RESULT: PASS ====" {0 0 0};
+    %jmp T_1.1;
+T_1.0 ;
+    %vpi_call/w 3 93 "$display", "==== GEOM RESULT: FAIL (%0d) ====", v0xa40c8c140_0 {0 0 0};
+T_1.1 ;
+    %vpi_call/w 3 94 "$finish" {0 0 0};
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "-";
+    "tb_sbm_geom_check.v";
