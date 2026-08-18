@@ -170,7 +170,13 @@ module sbm_gauss_v #(
 				.WRITE_DATA_WIDTH_A (8),
 				.READ_DATA_WIDTH_B  (8),
 				.READ_LATENCY_B     (1),
-				.WRITE_MODE_A       ("no_change")
+				// N-28 修复（ModelSim/Vivado 真实 XPM 暴露）：6 个行缓冲每拍对
+				//   同一列地址"又写又读"（写当前行 c，读 6 行前 c）。此冲突下
+				//   必须返回"写前的旧值"（即上一行像素），故须 read_first。
+				//   原"no_change"在真实原语中会冻结读数，导致垂直抽头错位、
+				//   DUT 与 Golden 对不上、tdata 时序错乱；OSS 简化行为模型曾
+				//   忽略该参数而误判通过。
+				.WRITE_MODE_A       ("read_first")
 			) u_lb (
 				.clka  (clk),
 				.ena   (1'b1),
