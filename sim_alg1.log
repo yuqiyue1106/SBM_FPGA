@@ -1,0 +1,2 @@
+PASS: 32768 pixels matched, protocol clean, backpressure observed=1
+tb_sbm_alg1_gaussian.v:243: $finish called at 596035000 (1ps)

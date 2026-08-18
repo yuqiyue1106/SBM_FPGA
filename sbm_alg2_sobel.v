@@ -9,7 +9,34 @@
 //   X_IN占高位)；②上边界复制preload_flag改为覆盖整个第0行(原版仅在帧首
 //   预拍触发,lb2写入陈旧数据)；③左边界行首3列整体装载(原版缺失)；
 //   ④帧尾补1行(原版缺失)；⑤行缓冲改用2缓冲按行号mod2轮转+端口B读取
-//   (原版链式lb2.dina=lb1_out在读延迟1拍下错位,且窗口行序未随r2轮转)。
+//   (原版链式lb2.dina=lb1_out在读延迟1拍下错位,且窗口行序未随r2轮转)；
+//   ⑥【N-14】w_in_valid 补入 s_axis_tuser 项：原版帧首拍被 row_active=0
+//   门控丢弃，整帧左移1列，行尾补拍触发条件(s_col==IMG_W-1)永不命中，
+//   右边界复制/帧尾补1行静默丢失、输出缺行且窗口行间对角错位
+//   (C-golden TB2 逐拍比对捕获)。
+//   ⑦【N-19】行尾补拍硬件强制：原版补拍依赖"上游行间≥1拍空闲"软契约，
+//   背靠背满速输入时补拍与下一行列0同拍到达并被吞掉：补拍窗口被行首
+//   装载覆盖（右边界梯度为下一行列0垃圾值）、行首标签错列+1、每行多
+//   1个发射窗口致输出相位逐行对角漂移（C-golden TB2 ramp 图样捕获：
+//   got=1016²+1016²，错误区左端=IMG_W-1-row）。修法照搬 alg8 P2：
+//   补拍期间拉低 s_axis_tready 硬件强制行间隙；并将 tready 纳入外部
+//   数据消费条件（AXI-S 握手语义：tvalid && tready 才消费）。
+//   ⑧【N-20】梯度加法树符号扩展缺陷：w_x_pos/w_x_neg 为 10bit 无符号
+//   （和最大 4×255=1020），原代码直接 $signed() 相减使 ≥512 的和别名成
+//   负数（512→-512），亮窗口区域 dx/dy 错乱（C-golden TB2 ramp 图样捕获：
+//   右端对角漂移区 got=1016²，边界恰为加法树和≥512 的像素）。修法：
+//   先零扩展为 12bit 有符号再相减。
+//   ⑨【N-22】末行 pad 窗口的当前行源错误：w_row_cur 以 flush_row 为条件
+//   切换为末行复制 lb 读，但末行消费沿即置 flush_row=1，致使末行 pad 拍
+//   与垫拍窗口采样拍的当前行误用 lb 读（应为 cur_d=last_pix）：倒数第二行
+//   右端错（C-golden TB2 捕获）。修法：切换条件收紧为 flush_row && !pad_d1。
+//   ⑩【N-23】帧尾补行行首装载三行全取末行复制：win[0]=行 H-2 应为 p2
+//   （仅 win[1]/win[2] 为末行复制），否则末行前 2 列窗口顶行错
+//   （C-golden TB2 捕获：末行 col0/1 错）。
+//   ⑪【N-24】输出帧计数器帧间不复位：out_row 在每帧末像素处递增为
+//   IMG_H 后不回卷，第二帧起 m_axis_tuser(=out_row==0) 永不命中且 tuser
+//   帧首标记丢失（C-golden TB2 双帧协议校验捕获）。修法：末帧像素
+//   (out_row==IMG_H-1 && out_pix==IMG_W-1)发射后计数器回卷归零。
 // ==================================================================
 `include "sbm_geometry.vh"
 module sbm_alg2_sobel #(
@@ -31,7 +58,6 @@ module sbm_alg2_sobel #(
 	output wire        m_axis_tuser,
 	output wire        m_axis_tlast
 );
-assign s_axis_tready = 1'b1;       // 全速吞吐（上游高斯已保证帧间间隔）
 // ---------- 对齐流行列跟踪（统一坐标系） ----------
 // s_row: 0..IMG_H（IMG_H=帧尾补1行）；s_col: 0..IMG_W（IMG_W=行尾补1拍）
 reg [12:0] s_row, s_col;
@@ -40,7 +66,13 @@ reg        frame_end;             // 帧末行指示
 reg [1:0]  flush_c;               // 行尾补1拍剩余计数
 reg        flush_row;             // 帧尾补1行标记
 reg [7:0]  last_pix;              // 行末像素（右边界复制源）
-wire w_in_valid = (s_axis_tvalid && row_active) || (flush_c != 2'd0) || flush_row;
+// 消费契约：帧尾补1行依赖帧间≥ IMG_W+2 拍空闲（真实系统由 alg1 gauss_v
+// 底部冲刷提供 ≥3 行帧间间隙）。行尾补1拍不再依赖上游软契约：补拍期间
+// 【N-19】拉低 tready 硬件强制行间隙，任意上游节奏（含满速背靠背）下
+// 补拍窗口必然完整生成。
+assign s_axis_tready = (flush_c == 2'd0);   // 【N-19】补拍期间暂停接收
+wire w_in_valid = (s_axis_tvalid && s_axis_tready && (row_active || s_axis_tuser))
+               || (flush_c != 2'd0) || flush_row;
 wire [7:0] w_in_data = (flush_c != 2'd0) ? last_pix : s_axis_tdata;
 wire w_preload = (s_row == 13'd0);          // 第0行：上边界复制
 wire w_flush_col = (flush_c != 2'd0) || (flush_row && (s_col == IMG_W));
@@ -60,8 +92,11 @@ always @(posedge clk or negedge rst_n) begin
 		if (s_axis_tvalid && s_axis_tlast) begin
 			row_active <= 1'b0; frame_end <= 1'b1;
 		end
-		// 行尾补1拍触发（真实行末像素）
-		if (s_axis_tvalid && row_active && (s_col == IMG_W-1)) begin
+		// 行尾补1拍触发（真实行末像素）：消费拍上升沿求值，s_col 为消费前
+		// 值，末像素消费时恰为 IMG_W-1。（前提：帧首拍已被消费，见
+		// w_in_valid 的 s_axis_tuser 项——若帧首拍丢失，流整体左移 1 列，
+		// 本条件将永不命中，行尾补拍静默丢失。）
+		if (s_axis_tvalid && s_axis_tready && row_active && (s_col == IMG_W-1)) begin
 			flush_c <= 2'd1;
 			if (s_row == IMG_H-1) flush_row <= 1'b1;   // 末行：触发帧尾补1行
 		end else if (flush_c != 2'd0)
@@ -72,7 +107,7 @@ always @(posedge clk or negedge rst_n) begin
 			frame_end <= 1'b0;
 		end
 		// 行末像素锁存（右边界复制源）
-		if (s_axis_tvalid && row_active)
+		if (s_axis_tvalid && s_axis_tready && row_active)
 			last_pix <= s_axis_tdata;
 		// 行列推进（含补1拍/补1行）
 		if (w_in_valid) begin
@@ -87,7 +122,16 @@ end
 // ---------- 2个行缓冲（按行号mod2轮转，端口A写/端口B读） ----------
 // 对齐流时序：cur_d(t+1)=w_in_data(t)=像素(r,c)、doutb(t+1)=addrb(t)=s_col(t)列的
 // 旧行数据，两者在t+1拍对齐；故窗口在t+2沿采样对齐流(vld_d1)并用s_row_d/s_col_d
-// 记录该像素行列(延迟1拍)。
+// 记录该像素行列(延迟1拍)。读地址必须与写同拍(s_col)：缓冲内容在消费拍
+// 即被改写，read_first 仅保护同拍同址冲突，滞后读会读到新行数据。
+// 【N-15】行首整体装载错列修复：lb 读流水有 1 拍延迟（t 拍呈现地址、t+1 拍
+//   出口），装载沿(t+2)的 win 赋值采样的是行首消费拍(t)呈现的地址=列1 的
+//   读出，超前 cur_d(列0) 一列 → 三行整体错列（C-golden TB2 ramp 图样捕获：
+//   每行右端错位区逐行左移）。修法：行首消费拍(t)同沿锁存 lb 出口——该拍
+//   lb 出口 = 上一拍(行间间隙/补拍收尾, s_col 已回绕为0)呈现的列0地址 +
+//   read_first 写前值 = 旧行列0；装载沿(t+2)改用锁存值 lb_a_rs/lb_b_rs，
+//   与 cur_d(列0) 对齐。lb_rs 每行行首刷新一次，帧首第0行的锁存值为上电
+//   垃圾，但第0行窗口标签永不被发射（丢弃条件 row≥1），不影响输出。
 reg  [7:0]  cur_d;               // 当前行数据延迟1拍（对齐读延迟）
 reg         row_start_d;         // 行首标记延迟1拍（对齐，用于左边界复制）
 reg         vld_d1;              // 输入有效延迟1拍（对齐流有效）
@@ -126,11 +170,56 @@ xpm_memory_sdpram #(
 	.dina(w_in_data),
 	.clkb(clk), .enb(1'b1), .addrb(w_lb_addr), .doutb(lb_b)
 );
-// 窗口行数据：r2=s_row[0]；行r-1读缓冲(r-1)%2=~r2；行r-2读缓冲r%2=r2(旧内容)
-// 帧尾补1行(s_row==IMG_H)时"当前行"=末行复制=缓冲r2读出口
-wire [7:0] w_row_cur = flush_row ? (s_row[0] ? lb_b : lb_a) : cur_d;
-wire [7:0] w_row_p1  = (s_row[0] == 1'b0) ? lb_b : lb_a;   // 行r-1
-wire [7:0] w_row_p2  = (s_row[0] == 1'b0) ? lb_a : lb_b;   // 行r-2
+// 【N-15】行首对齐锁存：行首消费拍(s_col==0)同沿捕获 lb 出口（=上一拍呈现
+// 的列0地址的写前读值），供 t+2 装载沿使用，消除读流水 1 拍超前。
+reg [7:0] lb_a_rs, lb_b_rs;
+always @(posedge clk or negedge rst_n) begin
+	if (!rst_n) begin lb_a_rs <= 8'd0; lb_b_rs <= 8'd0; end
+	else if (w_in_valid && (s_col == 13'd0)) begin
+		lb_a_rs <= lb_a; lb_b_rs <= lb_b;
+	end
+end
+// 窗口行数据：消费行r写入缓冲r%2，read_first 使缓冲r%2读出=行r-1、
+// 缓冲(r+1)%2=行r-2。帧尾补1行(s_row==IMG_H)时"当前行"=末行复制=存末行
+// 的缓冲读出口（补行不写、缓冲稳定）。
+// 【N-16】补拍窗口的行奇偶修正：补拍(行尾fc=1拍)产生的右边界窗口在
+//   补拍的下一拍被窗口块采样，此时 s_col/s_row 已回绕(s_row=r+1)，奇偶
+//   翻转将选错缓冲（右端梯度错乱、逐行对角漂移，C-golden TB2 捕获）。
+//   修法：pad_d1 指示"本采样拍对应补拍数据"，行奇偶改用补拍触发沿锁存
+//   的 s_row_r(=r)；常规拍 pad_d1=0 用实时 s_row。flush_row 拍 pad_d1=0、
+//   s_row=IMG_H，p1 恰选中存末行的缓冲 ✓。
+reg        pad_d1;
+reg [12:0] s_row_r;
+reg [7:0]  pad_lb_a, pad_lb_b;   // 补拍当拍 lb 出口锁存（read_first 写前值）
+always @(posedge clk or negedge rst_n) begin
+	if (!rst_n) begin pad_d1 <= 1'b0; s_row_r <= 13'd0;
+		pad_lb_a <= 8'd0; pad_lb_b <= 8'd0; end
+	else begin
+		pad_d1 <= (flush_c != 2'd0);
+		if (s_axis_tvalid && s_axis_tready && row_active && (s_col == IMG_W-1))
+			s_row_r <= s_row;        // 行末像素消费沿：锁存补拍所属行 r
+		if (flush_c != 2'd0) begin   // 补拍当拍：捕获 lb 写前读值
+			pad_lb_a <= lb_a; pad_lb_b <= lb_b;
+		end
+	end
+end
+wire [12:0] w_row_sel = pad_d1 ? s_row_r : s_row;
+// 【N-22】末行复制切换仅限真实补行拍：末行 pad 拍(flush_c≠0，pad_d1 尚为0)
+//   与垫拍窗口采样拍(pad_d1=1)的当前行仍为 cur_d(=last_pix)；补行拍
+//   (F1..FW，flush_c=0 且 pad_d1=0)才取末行缓冲读出口。
+wire [7:0] w_row_cur = (flush_row && !pad_d1 && (flush_c == 2'd0)) ? ((w_row_sel[0] == 1'b0) ? lb_b : lb_a) : cur_d;
+// 常规移位拍：实时 lb（read_first 写保护在消费沿成立）；补拍窗口采样拍
+// 缓冲 r%2 已被行 r 整行覆盖（行 r-2 丢失），改用补拍锁存 pad_lb_*。
+wire [7:0] w_live_p1 = (w_row_sel[0] == 1'b0) ? lb_b : lb_a;
+wire [7:0] w_live_p2 = (w_row_sel[0] == 1'b0) ? lb_a : lb_b;
+wire [7:0] w_pad_p1  = (w_row_sel[0] == 1'b0) ? pad_lb_b : pad_lb_a;
+wire [7:0] w_pad_p2  = (w_row_sel[0] == 1'b0) ? pad_lb_a : pad_lb_b;
+wire [7:0] w_row_p1  = pad_d1 ? w_pad_p1 : w_live_p1;   // 行r-1
+wire [7:0] w_row_p2  = pad_d1 ? w_pad_p2 : w_live_p2;   // 行r-2
+// 整体装载专用（列0对齐锁存值）：帧尾补行时装载行的 win[2] 也取末行复制
+wire [7:0] w_rs_p1 = (w_row_sel[0] == 1'b0) ? lb_b_rs : lb_a_rs;   // 行r-1 列0
+wire [7:0] w_rs_p2 = (w_row_sel[0] == 1'b0) ? lb_a_rs : lb_b_rs;   // 行r-2 列0
+wire [7:0] w_rs_cur = flush_row ? w_rs_p1 : cur_d;
 // ---------- 3×3窗口寄存器（行首3列整体装载=左边界复制） ----------
 reg [7:0] win [0:2][0:2];
 reg       vld_w;
@@ -140,11 +229,16 @@ always @(posedge clk or negedge rst_n) begin
 	if (!rst_n) begin
 		for (r=0;r<3;r=r+1) for (c=0;c<3;c=c+1) win[r][c] <= 8'd0;
 		vld_w <= 1'b0; s_row_w <= 13'd0; s_col_w <= 13'd0;
-	end else if (vld_d1) begin      // 对齐流有效（数据=1拍前输入像素）
-		if (row_start_d) begin          // 行首：3列整体装载（左边界复制）
+	end else if (vld_d1) begin      // 对齐流有效（含补拍/补行边界复制拍）
+		if (row_start_d && flush_row) begin // 帧尾补行行首：win[0]=行H-2，win[1]/[2]=末行复制
+			// 【N-23】原版三行全取 w_row_p1，win[0](行H-2)错误
 			win[0][0] <= w_row_p2; win[0][1] <= w_row_p2; win[0][2] <= w_row_p2;
 			win[1][0] <= w_row_p1; win[1][1] <= w_row_p1; win[1][2] <= w_row_p1;
-			win[2][0] <= w_row_cur; win[2][1] <= w_row_cur; win[2][2] <= w_row_cur;
+			win[2][0] <= w_row_p1; win[2][1] <= w_row_p1; win[2][2] <= w_row_p1;
+		end else if (row_start_d) begin   // 行首：3列整体装载（左边界复制，列0对齐）
+			win[0][0] <= w_rs_p2; win[0][1] <= w_rs_p2; win[0][2] <= w_rs_p2;
+			win[1][0] <= w_rs_p1; win[1][1] <= w_rs_p1; win[1][2] <= w_rs_p1;
+			win[2][0] <= w_rs_cur; win[2][1] <= w_rs_cur; win[2][2] <= w_rs_cur;
 		end else begin                  // 正常左移
 			for (r=0;r<3;r=r+1) begin
 				win[r][0] <= win[r][1];
@@ -165,8 +259,16 @@ wire [9:0]  w_x_pos = win[0][2] + {win[1][2],1'b0} + win[2][2];
 wire [9:0]  w_x_neg = win[0][0] + {win[1][0],1'b0} + win[2][0];
 wire [9:0]  w_y_pos = win[2][0] + {win[2][1],1'b0} + win[2][2];
 wire [9:0]  w_y_neg = win[0][0] + {win[0][1],1'b0} + win[0][2];
-wire signed [11:0] w_dx = $signed(w_x_pos) - $signed(w_x_neg);  // ±1020
-wire signed [11:0] w_dy = $signed(w_y_pos) - $signed(w_y_neg);
+// 【N-20】加法树和为 10bit 无符号（最大 4×255=1020），直接 $signed() 会使
+//   ≥512 的和别名成负数（512→-512）：亮窗口区域 dx/dy 错乱（C-golden TB2
+//   ramp 图样捕获：右端对角漂移区 got=1016²，边界恰为和≥512 的像素）。
+//   修法：先零扩展为 12bit 有符号（±1020 不溢出）再相减。
+wire signed [11:0] w_sxp = {2'b00, w_x_pos};
+wire signed [11:0] w_sxn = {2'b00, w_x_neg};
+wire signed [11:0] w_syp = {2'b00, w_y_pos};
+wire signed [11:0] w_syn = {2'b00, w_y_neg};
+wire signed [11:0] w_dx = w_sxp - w_sxn;  // ±1020
+wire signed [11:0] w_dy = w_syp - w_syn;
 reg signed [11:0] dx_r, dy_r;
 reg        vld_g;
 reg [12:0] row_cnt_g, pix_cnt_g;
@@ -287,7 +389,12 @@ reg [12:0] out_row, out_pix;
 always @(posedge clk or negedge rst_n) begin
 	if (!rst_n) begin out_row <= 13'd0; out_pix <= 13'd0; end
 	else if (w_emit) begin
-		if (out_pix == IMG_W-1) begin out_pix <= 13'd0; out_row <= out_row + 13'd1; end
+		if (out_pix == IMG_W-1) begin
+			out_pix <= 13'd0;
+			// 【N-24】帧末像素后行计数回卷归零，保证下一帧 tuser 命中
+			if (out_row == IMG_H-1) out_row <= 13'd0;
+			else                    out_row <= out_row + 13'd1;
+		end
 		else                    out_pix <= out_pix + 13'd1;
 	end
 end

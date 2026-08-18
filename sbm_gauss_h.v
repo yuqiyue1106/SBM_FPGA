@@ -13,11 +13,15 @@
 //     每行恰好输出 IMG_W 个有效像素（列 0..IMG_W-1），无气泡。
 //   延迟：2 拍（移位寄存器 1 拍 + 加法树 1 拍），吞吐 1 像素/时钟。
 //   舍入：四舍五入，(sum + 32) >> 6。全部移位实现，0 DSP。
+//   N-8b 修复（硬件强制行间隙，消除软契约）：行尾补 3 拍期间 o_ready=0，
+//     顶层据此拉低 s_axis_tready，上游背靠背满速送数时补零拍必然排空，
+//     不再吞掉下一行真实像素（修法照搬 alg8 P2：tready 门控 flush_c==0）。
 // @param[in]  clk        时钟
 // @param[in]  rst_n      低有效异步复位
 // @param[in]  i_valid    输入有效（每行 IMG_W 个像素）
 // @param[in]  i_row_start 行首指示（本拍为行首像素，与 i_valid 对齐）
 // @param[in]  i_data     输入像素（8bit）
+// @param[out] o_ready    输入就绪（行尾补 3 拍期间为 0，硬件强制行间隙）
 // @param[out] o_valid    输出有效（每行 IMG_W 个，与 o_data 对齐）
 // @param[out] o_row_start 输出行首标记（与 o_valid 对齐）
 // @param[out] o_data     输出像素（8bit）
@@ -33,6 +37,7 @@ module sbm_gauss_h #(
 	input  wire       i_valid,       ///< 输入有效（每行 IMG_W 个像素）
 	input  wire       i_row_start,   ///< 行首指示（本拍为行首像素，与 i_valid 对齐）
 	input  wire [7:0] i_data,
+	output wire       o_ready,       ///< 输入就绪（flush_c!=0 期间为 0，硬件强制行间隙）
 	output wire       o_valid,       ///< 输出有效（每行 IMG_W 个，与 o_data 对齐）
 	output wire       o_row_start,   ///< 输出行首标记（与 o_valid 对齐）
 	output wire [7:0] o_data
@@ -42,14 +47,27 @@ module sbm_gauss_h #(
 	reg  [12:0] pix_cnt;             ///< 0..IMG_W-1
 	reg  [1:0]  flush_c;             ///< 行尾复制剩余拍（0..3）
 	reg  [7:0]  last_pix;            ///< 行末像素（右边界复制源）
-	wire        w_in_valid = i_valid || (flush_c != 2'd0);
+	// N-9 修复（TB 逐拍探针定位）：行首整体装载必须由"本模块自维护的
+	//   列计数器"判定，不能直接信任外部 i_row_start 脉冲——上游若把
+	//   组合列计数器（如 alg1 顶层 pix_cnt）当判据，i_row_start 会在
+	//   第 0、1 两拍连续拉高（pix_cnt 在 posedge 更新，第 2 拍仍读到 0），
+	//   首两拍被整体装载两次 → 移位寄存器被覆盖、水平输出整体滞后 2 拍。
+	//   现以 i_valid 拍自计 in_col，in_col==0 拍即行首，脉宽恒 1 拍。
+	//   注意：行末 pix_cnt 回绕到 0 后紧跟 3 个 flush 拍，必须用
+	//   flush_c==0 排除，否则 flush 拍被当行首反复复位计数器/重装抽头。
+	wire        w_row_first = (pix_cnt == 13'd0) && (flush_c == 2'd0);
+	// N-8b: 行尾补零期(flush_c!=0)拉低 o_ready —— 硬件强制行间 ≥3 拍间隙。
+	// 旧版软契约下若上游满速连发，i_valid 恒 1 使 flush_c 永不递减，
+	// 补零拍吞掉下一行真实像素 → 全图静默错位（与 alg8 P2 同类缺陷）。
+	assign o_ready = (flush_c == 2'd0);
+	wire        w_in_valid = (i_valid && o_ready) || (flush_c != 2'd0);
 	wire [7:0]  w_in_data  = (flush_c != 2'd0) ? last_pix : i_data;
 
 	always @(posedge clk or negedge rst_n) begin
 		if (!rst_n) begin
 			pix_cnt <= 13'd0; flush_c <= 2'd0; last_pix <= 8'd0;
 		end else begin
-			if (i_valid) begin
+			if (i_valid && o_ready) begin
 				last_pix <= i_data;
 				if (pix_cnt == IMG_W-1) begin
 					pix_cnt <= 13'd0;
@@ -68,7 +86,7 @@ module sbm_gauss_h #(
 		if (!rst_n) begin
 			for (i = 0; i < 7; i = i + 1) tap[i] <= 8'd0;
 		end else if (w_in_valid) begin
-			if (i_row_start) begin      // 左边界复制：整体装载
+			if (w_row_first) begin      // 左边界复制：整体装载（自计列 0，脉宽恒 1 拍）
 				for (i = 0; i < 7; i = i + 1) tap[i] <= w_in_data;
 			end else begin              // 正常右移
 				for (i = 0; i < 6; i = i + 1) tap[i] <= tap[i+1];
@@ -100,12 +118,20 @@ module sbm_gauss_h #(
 		end
 	end
 
-	// ==================== 行内周期计数（含复制拍）：0..IMG_W+2，与 vld_d2 同延迟 ====================
+	// ==================== 行内周期计数（含复制拍）：0..IMG_W+2，与 sum/vld_d2 对齐 ====================
+	// N-9 一并整改：旧版用外部 i_row_start 复位 w_cycle，同样受其 2 拍
+	//   宽脉冲影响（第 2 拍又被清回）。改用本模块自计 w_in_valid 拍数：
+	//   w_cycle = 0..IMG_W+2（行内第 1..IMG_W+3 拍）。
+	//   对齐推导：抽头寄存 1 拍 → sum 再寄存 1 拍，数据路径共 2 拍；
+	//   w_cycle 同拍寄存后经 w_cycle_d1 恰为 2 拍（w_cycle_d2 多滞后
+	//   1 拍，旧版误用导致发射窗口选中列 1..W，全行右移 1 列）。
 	reg  [12:0] w_cycle;                   ///< 输入周期（0..IMG_W+2）
 	always @(posedge clk or negedge rst_n) begin
 		if (!rst_n) w_cycle <= 13'd0;
-		else if (i_row_start) w_cycle <= 13'd0;
-		else if (w_in_valid) w_cycle <= w_cycle + 13'd1;
+		else if (w_in_valid) begin
+			if (w_row_first) w_cycle <= 13'd0;
+			else             w_cycle <= w_cycle + 13'd1;
+		end
 	end
 	reg  [12:0] w_cycle_d1, w_cycle_d2;
 	always @(posedge clk or negedge rst_n) begin
@@ -113,9 +139,11 @@ module sbm_gauss_h #(
 		else begin w_cycle_d1 <= w_cycle; w_cycle_d2 <= w_cycle_d1; end
 	end
 
-	// ==================== 输出：丢弃每行前 3 个因果窗口结果（列 -3..-1），发射列 0..IMG_W-1 ====================
-	assign o_valid     = vld_d2 && (w_cycle_d2 >= 13'd3) && (w_cycle_d2 < IMG_W + 13'd3);
-	assign o_row_start = o_valid && (w_cycle_d2 == 13'd3);
+	// ==================== 输出：丢弃每行前 3 个因果窗口结果（列 -3..-1），发射列 0..IMG_W-1） ====================
+	// 有效发射拍：w_cycle_d1 = 3..IMG_W+2（与 sum/vld_d2 严格同拍，含补 3 拍
+	//   对应的列 W-3..W-1），共 IMG_W 个；o_row_start 在首拍（列 0）同拍拉高
+	assign o_valid     = vld_d2 && (w_cycle_d1 >= 13'd3) && (w_cycle_d1 <= IMG_W + 13'd2);
+	assign o_row_start = o_valid && (w_cycle_d1 == 13'd3);
 	assign o_data      = (sum + 14'd32) >> 6;   // 四舍五入到 8bit，无溢出
 
 endmodule

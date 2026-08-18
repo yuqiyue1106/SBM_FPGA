@@ -12,6 +12,11 @@
 #  * P0-2 (AXI 8B 对齐)    几何 16T 对齐 + 每突发首拍 awaddr 断言  -> run_alg9 / run_geom
 #  * P0-3 (alg8 背压)      下游反压 + 逐帧 tuser + 黄金比对      -> run_alg8
 #  * 几何单一真源自检                                          -> run_geom
+#  * N-8 前端协议闭环: alg1→alg3 C-golden 功能 TB (逐行逐字节比对,
+#    tuser/tlast 协议校验, 行门控/补拍吞没/帧间残留即 FAIL):
+#      alg1 两级高斯     -> run_alg1
+#      alg2 Sobel+CORDIC -> run_alg2
+#      alg3 量化投票     -> run_alg3
 #
 # Xilinx XPM RAM/FIFO primitives are substituted by behavioral models:
 #   xpm_memory_spram_beh.v  (SPRAM, read_first / latency 1)
@@ -24,9 +29,11 @@
 IV      ?= iverilog
 VVP     ?= vvp
 
-.PHONY: all run_fix run_alg9 run_alg9_multi run_alg11 run_geom run_alg9_cont run_alg8 clean
+.PHONY: all run_fix run_alg9 run_alg9_multi run_alg11 run_geom run_alg9_cont run_alg8 \
+        run_alg1 run_alg2 run_alg3 clean
 
-all: run_fix run_alg9 run_alg9_multi run_alg11 run_alg9_cont run_alg8 run_geom
+all: run_fix run_alg9 run_alg9_multi run_alg11 run_alg9_cont run_alg8 run_geom \
+     run_alg1 run_alg2 run_alg3
 
 # --- 黄金数据再生成: golden_sbm.c 一次产出 stimulus.hex/expected_pos.txt/hits.txt ---
 golden_sbm: golden_sbm.c
@@ -113,9 +120,41 @@ sim_geom.out: tb_sbm_geom_check.v sbm_geometry.vh
 run_geom: sim_geom.out
 	$(VVP) $<
 
+# --- N-8 前端协议闭环: alg1 两级高斯 C-golden TB ------------------------------
+#  tb 内部 `include sbm_alg1_gaussian.v; 逐行逐字节比对 + tuser/tlast 校验,
+#  任意像素/标记不符 -> FAIL (grep "^PASS" 把关, 无 PASS 即非零退出)
+sim_alg1.out: tb_sbm_alg1_gaussian.v sbm_alg1_gaussian.v sbm_gauss_h.v sbm_gauss_v.v \
+		xpm_memory_sdpram_beh.v sbm_geometry.vh
+	$(IV) -g2012 -o $@ \
+		tb_sbm_alg1_gaussian.v sbm_gauss_h.v sbm_gauss_v.v xpm_memory_sdpram_beh.v
+
+run_alg1: sim_alg1.out
+	$(VVP) $< | tee sim_alg1.log
+	@grep -q '^PASS' sim_alg1.log
+
+# --- N-8 前端协议闭环: alg2 Sobel+CORDIC C-golden TB --------------------------
+sim_alg2.out: tb_sbm_alg2_sobel.v sbm_alg2_sobel.v cordic_atan2_beh.v cordic_atan2_func.vh \
+		xpm_memory_sdpram_beh.v sbm_geometry.vh
+	$(IV) -g2012 -o $@ \
+		tb_sbm_alg2_sobel.v cordic_atan2_beh.v xpm_memory_sdpram_beh.v
+
+run_alg2: sim_alg2.out
+	$(VVP) $< | tee sim_alg2.log
+	@grep -q '^PASS' sim_alg2.log
+
+# --- N-8 前端协议闭环: alg3 量化投票 C-golden TB ------------------------------
+sim_alg3.out: tb_sbm_alg3_quantize.v sbm_alg3_quantize.v xpm_memory_sdpram_beh.v sbm_geometry.vh
+	$(IV) -g2012 -o $@ \
+		tb_sbm_alg3_quantize.v xpm_memory_sdpram_beh.v
+
+run_alg3: sim_alg3.out
+	$(VVP) $< | tee sim_alg3.log
+	@grep -q '^PASS' sim_alg3.log
+
 clean:
 	rm -f sim_fix.out sim_alg9.out sim_alg9_m.out sim_alg9_m2.out sim_alg9_m3.out \
-	      sim_alg11.out sim_alg9_fail.out sim_geom.out sim_alg9_cont.out sim_alg8.out
+	      sim_alg11.out sim_alg9_fail.out sim_geom.out sim_alg9_cont.out sim_alg8.out \
+	      sim_alg1.out sim_alg2.out sim_alg3.out sim_alg1.log sim_alg2.log sim_alg3.log
 
 distclean: clean
 	rm -f golden_sbm stimulus.hex expected_pos.txt hits.txt

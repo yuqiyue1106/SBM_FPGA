@@ -34,6 +34,13 @@
   - [11.6 验证完备性与盲点](#116-验证完备性与盲点)
   - [11.7 行动建议（按优先级）](#117-行动建议按优先级)
   - [11.8 第二轮全量复审判定（2026-08-15 融合）](#118-第二轮全量复审判定2026-08-15-融合)
+- [12. N-8 前端协议统一与验证闭环（2026-08-18）](#12-n-8-前端协议统一与验证闭环2026-08-18)
+  - [12.1 任务背景与验收标准](#121-任务背景与验收标准)
+  - [12.2 任务 1：统一 AXI4-Stream 帧协议](#122-任务-1统一-axi4-stream-帧协议)
+  - [12.3 任务 2：sbm_gauss_h 行尾冲刷硬件强制](#123-任务-2sbm_gauss_h-行尾冲刷硬件强制)
+  - [12.4 任务 3：C-golden 功能 TB 与 Makefile 接入](#124-任务-3c-golden-功能-tb-与-makefile-接入)
+  - [12.5 缺陷捕获与修复总账](#125-缺陷捕获与修复总账)
+  - [12.6 回归结果](#126-回归结果)
 
 ---
 
@@ -103,7 +110,9 @@ Alg.Code/
 ├── 黄金参考模型
 │   └── golden_sbm.c                 # C 参考实现（生成 stimulus/hits/expected）
 ├── 测试平台（testbench）
-│   ├── tb_sbm_alg1_gaussian.v
+│   ├── tb_sbm_alg1_gaussian.v       # C-golden 两级高斯功能 TB（N-8 闭环，重写）
+│   ├── tb_sbm_alg2_sobel.v          # C-golden Sobel+CORDIC 功能 TB（N-8 闭环，新增）
+│   ├── tb_sbm_alg3_quantize.v       # C-golden 量化投票功能 TB（N-8 闭环，新增）
 │   ├── tb_sbm_alg2_cosim.v
 │   ├── tb_sbm_alg3_cosim.v
 │   ├── tb_sbm_alg8_spread.v
@@ -161,7 +170,7 @@ Alg.Code/
 
 | 层级 | 协议 | 使用模块 |
 |---|---|---|
-| 像素流（级 0/级 1 管线间） | AXI4-Stream（8bit tdata + tuser/tlast） | alg1→alg2→alg3, alg8→alg9 |
+| 像素流（级 0/级 1 管线间） | AXI4-Stream（8bit tdata + tuser/tlast；**N-8 闭环后全链统一：tuser=帧首像素、tlast=帧末像素，行边界由各模块内部列计数器自行派生，不依赖外部行同步**，见 §12） | alg1→alg2→alg3, alg8→alg9 |
 | 响应图落盘 | AXI4 Memory-Mapped（64bit 写主机） | alg9 → DDR |
 | 累加读回 | AXI4 Memory-Mapped（256bit 读主机） | alg11 ← DDR |
 | 配置/候选 | AXI4-Lite（32bit 寄存器/FIFO） | alg11 ←→ PS |
@@ -266,7 +275,16 @@ CELLS = WC × HC                 → 102400
 | 水平级延迟 | 2 拍（移位寄存器 1 + 加法树 1） |
 | 垂直级行缓冲 | 6 × IMG_W × 8bit（XPM SDPRAM） |
 | DSP | 0 |
-| 帧间约束 | 需预留 ≥ 3 行空闲（底部复制排空），由 `s_axis_tready` 反压保证 |
+| 帧间约束 | 底部冲刷期间 `s_axis_tready` 拉低，帧间强制 ≥3 行间隙（底部复制排空），由硬件反压保证，无需上游软约定 |
+
+#### N-8 协议统一整改（2026-08-18）
+
+顶层已重写为与 alg2/alg3 对齐的帧协议风格：
+
+- **N-8a**：删除旧版 `row_active` 对输入消费的门控（原 `i_valid = tvalid && row_active` 在帧首前/行间空隙拒绝合法数据，帧首拍被吞、每行第 0 像素丢失）。数据消费仅取决于 AXI-S 握手（`s_axis_tvalid && s_axis_tready`）。
+- **行边界内部派生**：自由列计数器 `pix_cnt` + 行计数器 `row_cnt`，仅在握手成立时推进；行首标记为寄存单拍脉冲（N-9：组合判据 `pix_cnt==0` 会因寄存器更新时点产生 2 拍宽脉冲，把下游行同步带偏一拍）。
+- **帧状态机**：tuser 帧首拍显式清零计数器与冲刷状态（帧间无状态残留）；tlast 帧末拍置位底部冲刷状态。
+- **N-8b**：gauss_h 行尾补 3 拍期间 `o_ready=0`，顶层联合拉低 `s_axis_tready` 硬件强制行间隙（照搬 alg8 P2 修法），背靠背满速送数亦不吞补零拍。
 
 #### 顶层接口（AXI4-Stream）
 
@@ -295,6 +313,17 @@ CELLS = WC × HC                 → 102400
 3. **左边界复制**：行首 3 列整体装载（原版缺失）。
 4. **帧尾补 1 行**：末行结束后补 1 行复制（原版缺失，末行输出丢失）。
 5. **行缓冲**：改为 2 缓冲按行号 mod 2 轮转 + 端口 B 读取（原版链式 `lb2.dina=lb1_out` 在读延迟 1 拍下错位）。
+
+#### N-8 闭环新增修正（⑥–⑪，C-golden TB2 逐项捕获）
+
+| 编号 | 缺陷 | 修法 |
+|---|---|---|
+| N-14 | 帧首拍被 `row_active=0` 门控丢弃，整帧左移 1 列，行尾补拍触发永不命中 | `w_in_valid` 补入 `s_axis_tuser` 项 |
+| N-19 | 行尾补拍依赖"上游行间 ≥1 拍空闲"软契约，满速背靠背时补拍被吞、输出相位逐行对角漂移 | 补拍期间拉低 `s_axis_tready`，tready 纳入消费条件（照搬 alg8 P2） |
+| N-20 | 加法树 10bit 无符号和直接 `$signed()` 相减，≥512 别名为负，亮区 dx/dy 错乱 | 先零扩展为 12bit 有符号再相减 |
+| N-22 | 末行 pad 窗口当前行源误用 lb 读（应为 `cur_d=last_pix`） | 切换条件收紧为 `flush_row && !pad_d1` |
+| N-23 | 帧尾补行行首装载三行全取末行复制（`win[0]` 应为行 H-2） | `win[0]` 改取 `w_row_p2` |
+| N-24 | `out_row` 帧末递增为 IMG_H 后不回卷，第二帧起 tuser 帧首标记丢失 | 末帧像素发射后计数器回卷归零 |
 
 #### CORDIC 延迟对齐（F2 修复）
 
@@ -334,13 +363,28 @@ CORDIC IP 的流水线延迟（`CORDIC_IP_LATENCY`，默认 21）必须与幅值
 
 投票窗口由因果 `[r-2..r] × [c-2..c]` 改为与 C++ 一致的中心窗口（输出像素 = 窗口中心 `(r-1, c-1)`），丢弃第 0 行与每行第 0 列。
 
-#### 幅值门控对齐（F3 修复）
+#### 幅值门控对齐（F3 → N-27 重写）
 
-强梯度门 `strong` 须与 `best_dir_r` 同源像素对齐。`strong_s1 → strong_s3 → strong_s4 → strong_s5` 总延迟 = 2 拍，延迟线深度 `STRONG_DLY = 3`（结构常数，与 `IMG_W/IMG_H` 无关）。运行期自检：`strong_sh[STRONG_DLY-1] !== strong_s5` → `$error`。
+**N-27（当前实现）**：行缓冲携带 4bit `{strong, label}`，消费拍当拍 lb 读出口即中心像素 `(r-1, c-1)` 的 strong；经 `sc_d` 4 级移位链寄存至与 `best_dir_r/best_votes_r` 同沿（消费拍 +4），级5 门控采样 `sc_d[3]`。
+
+原 F3 方案（`strong_s1→strong_s5` 随数据路径同拍传递 + `STRONG_DLY=3` 固定深度移位链）实际门控的是**消费像素 `(r,c)`** 的 strong——比中心像素多 1 行 1 列，块边界 ±1 行/列强弱反转（C-golden TB3 捕获：块边缘对角错 577 处）。固定深度移位链无法实现跨行延迟，已移除（`STRONG_DLY` 参数标废弃保留接口兼容，F3 自检一并移除）。
 
 #### 输出
 
 8bit 单热编码（`1<<dir` 或 0），边界像素输出 0。
+
+#### N-8 闭环新增修正（⑥–⑪，C-golden TB3 逐项捕获）
+
+| 编号 | 缺陷 | 修法 |
+|---|---|---|
+| N-14 | 帧首拍被 `row_active=0` 门控丢弃，整帧左移 1 列，量化方向整体错列 | `w_in_valid` 补入 `s_axis_tuser` 项 |
+| N-19 | 行尾补拍软契约依赖 | 补拍期间拉低 `s_axis_tready`（照搬 alg8 P2） |
+| N-24 | `out_row` 帧间不回卷，第二帧 tuser 丢失 | 末帧像素发射后回卷归零 |
+| N-25 | `flush_row` 清除沿与补行换行拍（`c=IMG_W`）同拍重叠，末行末列输出永缺 | 补拍（`flush_c≠0`）期间不清除，延迟一拍 |
+| N-26 | 坐标标签链与数据路径错位 2 拍（数据 5 级 vs 标签 3 级）：c=0 拍不再丢弃、帧尾多发 H-1 拍、背景区方向错 | 标签链补 2 级延迟（`s_row_w3/w4`）对齐 `vld_out`；补注册 `best_votes_r`（原版级5 直用级3 组合 votes） |
+| N-27 | strong 门源错位 1 行 1 列（门控消费像素而非中心像素） | 行缓冲 3bit→4bit 携带 strong，消费拍当拍 lb 读出口 + `sc_d` 4 级链（见上节） |
+
+流水线时序基准：消费拍 c → 级1寄存(c+1) → 级2窗口(c+2) → 级3投票(c+3) → 级4最优(c+4) → 级5输出(c+5)；帧内每帧窗口拍 = `(IMG_H+1)×(IMG_W+1)`，丢弃第 0 行与每行第 0 列后每帧发射 `IMG_W×IMG_H` 拍。
 
 ---
 
@@ -611,9 +655,11 @@ C 语言参考实现，生成三个联仿数据文件：
 
 | Testbench | 验证目标 | 黄金比对 |
 |---|---|---|
-| `tb_sbm_alg1_gaussian.v` | 高斯滤波输出 | 逐像素比对 |
-| `tb_sbm_alg2_cosim.v` | Sobel + CORDIC 输出 | mag2 + angle 逐拍比对 |
-| `tb_sbm_alg3_cosim.v` | 量化单热输出 | 逐像素比对 |
+| `tb_sbm_alg1_gaussian.v` | 高斯滤波输出（N-8 闭环重写，V-2 关闭） | C-golden 两级高斯 [2,7,14,18,14,7,2]/64 逐行逐字节比对 + tuser/tlast 协议校验，LFSR/随机非退化激励，双帧（PASS 32768 pixels） |
+| `tb_sbm_alg2_sobel.v` | Sobel+CORDIC 全链（N-8 闭环新增，V-3 关闭） | C-golden dx/dy/mag2/angle 逐拍比对（ramp 基底 + 中心亮方块 + LCG 噪声非退化激励），双帧协议校验（PASS 32768 pixels） |
+| `tb_sbm_alg3_quantize.v` | 量化投票全链（N-8 闭环新增，V-5 关闭） | C-golden 单热输出逐拍比对；分区激励覆盖投票边界（棋盘格 5/4 票）、强弱阈值（mag2=900/901 交替）、桶回绕（桶13/5）、首末行列清零，双帧（PASS 32768 pixels） |
+| `tb_sbm_alg2_cosim.v` | Sobel + CORDIC 输出（历史对齐验证，功能比对已由上方 TB 取代） | mag2 + angle 逐拍对齐 |
+| `tb_sbm_alg3_cosim.v` | 量化单热输出（历史对齐验证，功能比对已由上方 TB 取代） | 逐像素对齐 |
 | `tb_sbm_alg8_spread.v` | 扩散 OR + 背压 + 逐帧 tuser | 黄金比对 |
 | `tb_sbm_alg9_cosim.v` | LUT 落盘布局（AW/W/B 握手） | DDR 地址 + 数据 x 值检测 |
 | `tb_sbm_alg11_accum.v` | 端到端累加 + Top-32 | 黄金模型（越界过滤 + top-32 排序） |
@@ -624,6 +670,7 @@ C 语言参考实现，生成三个联仿数据文件：
 
 - **alg9**：TB 用 16bit LFSR 非退化图样（旧图样在地址错位场景下退化巧合造成假 PASS）；显式检测 `m_axi_awaddr`/`m_axi_wdata` 的 x 值（旧 TB 用 integer 承接地址得 unknown → 假 PASS）。
 - **alg11**：3 个 case——常规命中（thr=40）、全命中背压压力（thr=0）、8 特征 top-32 淘汰（满表淘汰语义）。
+- **alg1/2/3（N-8 闭环）**：三个 C-golden 功能 TB 均为双帧发送（帧间 ≥4×IMG_W 拍间隙、行间 3 拍间隙，验证任意上游节奏下硬件强制补拍正确）；逐拍比对 tdata/tuser/tlast 与期望坐标推进，任意像素或标记不符即计 err。验收实证：N-8 类协议级缺陷（行门控错误、补零拍被吞、帧间状态残留）在修复前均被逐行逐字节比对捕获报 FAIL（累计驱动修复 20+ 真实缺陷，见 §12）。
 
 ---
 
@@ -687,7 +734,7 @@ addr = RESP_BASE + (ori*T*T + block)*CELLS + cell
 ### 9.2 快速开始
 
 ```bash
-make all              # 跑全部联仿: F1 / F4 / F5a / F6+F9 / P0-1 / P0-3 / 几何自检
+make all              # 跑全部联仿: F1 / F4 / F5a / F6+F9 / P0-1 / P0-3 / 几何自检 / N-8 前端闭环
 make run_fix          # F1: lane 候选扫描(7 FIFO hits matched)
 make run_alg9         # F4: alg9 落盘布局(64x64)
 make run_alg9_multi   # F5a: alg9 多分辨率(128x64 / 64x40 / 512x512)
@@ -695,9 +742,12 @@ make run_alg9_cont    # P0-1: alg9 连续两帧
 make run_alg8         # P0-3: alg8 背压 + 逐帧 tuser
 make run_alg11        # F6+F9: alg11 端到端黄金比对(3 case)
 make run_geom         # 几何单一真源自检(默认 5000x5000)
+make run_alg1         # N-8 闭环: alg1 两级高斯 C-golden TB
+make run_alg2         # N-8 闭环: alg2 Sobel+CORDIC C-golden TB
+make run_alg3         # N-8 闭环: alg3 量化投票 C-golden TB
 ```
 
-预期输出均为 `RESULT: PASS` / `GEOM RESULT: PASS`。
+预期输出均为 `RESULT: PASS` / `GEOM RESULT: PASS` / `PASS: 32768 pixels ...`。前端三个 TB 的 PASS/FAIL 由 Makefile 层 `grep '^PASS'` 校验（TB 无 `$fatal`，无 PASS 行即 make 非零退出）；仿真日志留存于 `sim_alg1/2/3.log`（`make clean` 一并清理）。
 
 ### 9.3 换相机分辨率
 
@@ -726,7 +776,7 @@ ipx::package_project -root_dir ./ip_repo -vendor muteng -library mvtm ...
 |---|---|---|
 | F1（SIMILARITY_LUT 装载 / lane 扫描对齐） | ✅ 已修复并验证 PASS | LUT 改 `$readmemh` 装载；lane 候选扫描坐标/得分对齐 |
 | F2（CORDIC 延迟对齐） | ✅ 已修复并验证 PASS | 延迟线深度由 `CORDIC_IP_LATENCY` 派生 + 运行期对齐自检 |
-| F3（幅值门控对齐） | ✅ 已修复并验证 PASS | `STRONG_DLY=3` 结构常数 + 运行期自校验 |
+| F3（幅值门控对齐） | ✅ 已重写（N-27，2026-08-18） | 原方案门控消费像素而非中心像素（错位 1 行 1 列）；已改为行缓冲回读中心 strong + `sc_d` 链，C-golden TB3 验证 PASS |
 | F4（alg9 写请求 FIFO / AXI 落盘布局） | ✅ 已修复并验证 PASS | 64x64/120x64/64x40/512x512 多分辨率 |
 | F5（参数一致性 / 单一真源） | ✅ 已修复 | 几何量全部由 `sbm_geometry.vh` 派生 + 多分辨率自检 |
 | F5a（参数可维护性） | ✅ 已修复 | 见 §4；5 个"换相机即崩坏"硬编码缺陷已修复 |
@@ -739,10 +789,14 @@ ipx::package_project -root_dir ./ip_repo -vendor muteng -library mvtm ...
 | **D1（similarity_lut.mem 内容）** | ✅ **已修复（2026-08-15）** | 该 `.mem` 曾为线性斜坡占位而非真实 LUT，导致响应值全错（"假 PASS"）；已从 `line2Dup.cpp` L737 重生成，联仿复跑 PASS。详见 §11 |
 | **D2（累加器位宽）** | ⚠️ **待修复（高风险）** | lane 累加器 8-bit 无饱和，与 C++ `CV_16U` 不符；`FEAT_MAX=64` 强匹配时 256 回绕归零 → 漏检。详见 §11 |
 | **N-1（alg9 seg_buf 寄存器阵列）** | ⚠️ **待整改（P0 资源风险，2026-08-15 复审新增）** | `seg_buf` ≈ 81,920 FF（约 XCZU3EG FF 的 58%），为 FF 绑定约束，须 RAM 化。详见 §11.8 |
-| **V-2（tb_alg1 恒真空壳）** | ⚠️ **待整改（P0 验证缺口，2026-08-15 复审新增）** | 无比对逻辑即打印 PASS；激励为 40 字节 lane 填充 64×48 图像（其余为 X）。详见 §11.8 |
-| **V-3/V-5（alg2/alg3 TB 覆盖）** | ⚠️ 待整改（P1） | 仅对齐/同义反复验证，无功能比对，且未接入 Makefile 回归 |
+| **V-2（tb_alg1 恒真空壳）** | ✅ **已关闭（2026-08-18）** | 重写为 C-golden 两级高斯逐行逐字节比对 TB（`tb_sbm_alg1_gaussian.v`）并接入 `make all`，PASS 32768 pixels。详见 §12 |
+| **V-3/V-5（alg2/alg3 TB 覆盖）** | ✅ **已关闭（2026-08-18）** | 新建 `tb_sbm_alg2_sobel.v` / `tb_sbm_alg3_quantize.v` C-golden 功能比对并接入 `make all`，各 PASS 32768 pixels；过程中累计捕获并修复 N-14→N-27 系列缺陷。详见 §12 |
 | **V-4（CORDIC 真实 IP 延迟）** | ⚠️ 待确认（P1） | 行为模型延迟 21 拍为假设值，真实 IP Latency 需在 Vivado 中核对 |
 | **N-3/N-4/N-6/N-7/N-2（次级项）** | ⚠️ 待处理（P1–P3） | cand_fifo 复位跨域、start 脉冲同步余量为 0、alg13 方形假设与 `>=` 口径、L98 无效断言。详见 §11.8.5 |
+| **N-8（前端 AXI-S 帧协议级联缺陷）** | ✅ **已闭环（2026-08-18）** | alg1 行门控丢像素（N-8a）+ gauss_h 冲刷软契约（N-8b）+ 全链协议统一；C-golden TB 闭环中累计捕获并修复 N-9/N-14/N-19/N-20/N-22→N-27 共 12 项实体缺陷。详见 §12 |
+| **N-9（alg1 行首脉冲宽度）** | ✅ 已修复（TB1 逐拍探针定位） | 行首标记组合判据产生 2 拍宽脉冲，改寄存单拍脉冲 |
+| **N-14/N-19/N-22/N-23/N-24（alg2 协议/时序缺陷）** | ✅ 已修复（C-golden TB2 逐项捕获） | 见 §5.2 修正表 |
+| **N-14/N-19/N-24/N-25/N-26/N-27（alg3 协议/时序缺陷）** | ✅ 已修复（C-golden TB3 逐项捕获） | 见 §5.3 修正表 |
 
 ---
 
@@ -912,8 +966,84 @@ ipx::package_project -root_dir ./ip_repo -vendor muteng -library mvtm ...
 | N-7 | alg13 `score[i] >= MIN_SCORE` vs C++ `>` | P3 | 阈值恰等时多 1 候选 | 改为严格大于 |
 
 > **复审结论**：除 D2 外，数据链路与参考 C++ 语义一致；**P0 三项（D2、N-1、V-2）闭环后可进入系统集成与上板阶段**。
+>
+> **2026-08-18 更新**：本表 V-2 与 V-3/V-5 已在 N-8 前端协议闭环中关闭（C-golden 功能 TB 重建并接入 `make all`，同时捕获并修复 N-8/N-9/N-14→N-27 系列实体缺陷）；P0 前置项仅剩 **D2 与 N-1**。详见 §12。
 
 > *附：本次已落盘文件改动 —— `similarity_lut.mem`（重生成，256 项真实 LUT）。原斜坡备份 `similarity_lut.mem.ramp_bak` 已随目录清理移除（历史缺陷 D1 记录保留于本节）。*
+
+---
+
+## 12. N-8 前端协议统一与验证闭环（2026-08-18）
+
+### 12.1 任务背景与验收标准
+
+第六轮复核（§11.8）认定前端（alg1→alg3）**不可用**：存在 N-8 级联协议缺陷（alg1 行门控丢像素、gauss_h 冲刷软契约、帧标记语义不统一），且被 V-2/V-3/V-5 验证空洞长期掩盖。本轮整改三项任务全部闭环：
+
+1. **任务 1**：统一 AXI4-Stream 帧协议（tuser=帧首、tlast=帧末，行边界内部派生）；
+2. **任务 2**：sbm_gauss_h 行尾冲刷硬件强制（消除软契约依赖）；
+3. **任务 3**：补建 alg1→alg3 C-golden 功能测试台并接入 Makefile。
+
+**验收标准（已实证）**：N-8 类协议级缺陷（行门控错误、补零拍被吞、帧间状态残留）必须能被逐行逐字节比对捕获并报告 FAIL——闭环过程中三个 TB 累计捕获 20+ 真实缺陷（每项修复前均先见 FAIL、修复后复跑 PASS），见 §12.5。
+
+### 12.2 任务 1：统一 AXI4-Stream 帧协议
+
+- **协议风格**：全链统一采用 "tuser 标记帧首像素、tlast 标记帧末像素"，行边界由各模块内部列计数器自行派生，不依赖外部行同步信号。以 sbm_alg2_sobel.v / sbm_alg3_quantize.v 为参考基准（内部 `s_row/s_col` 计数器 + `row_active/flush_c/flush_row` 状态机）。
+- **sbm_alg1_gaussian.v 顶层重写**（详见 §5.1）：删除 `row_active` 对输入消费的门控（N-8a）；改用自由列/行计数器 + tuser/tlast 驱动的帧状态机；数据消费仅取决于 `tvalid && tready` 握手；帧首拍显式清零全部计数器与冲刷状态（帧间无残留）。
+- **一致性保证**：修改后 tuser/tlast 语义、输出像素总数（IMG_W×IMG_H）与下游 alg2 输入期望完全一致（TB1/TB2 级联风格验证）。
+
+### 12.3 任务 2：sbm_gauss_h 行尾冲刷硬件强制
+
+- **问题（N-8b）**：gauss_h 的 `flush_c`（行尾补 3 拍末像素复制）原仅在 `i_valid=0` 拍递减；若上游背靠背满速送数，补零拍被吞掉导致行尾数据错乱。
+- **修法（方案 A，照搬 alg8 P2）**：`flush_c≠0` 期间 `o_ready=0`，顶层据此联合拉低 `s_axis_tready`，硬件强制行间隙，补零拍必然排空。（方案 B：输入端加 ≥3 拍 skid/FIFO 缓冲，未采用。）
+- **验证**：任意上游发送节奏（含满速背靠背）下行尾补 3 拍均正确完成，每行输出 IMG_W 个有效像素无气泡（TB1 实证 `backpressure observed=1`，PASS 32768 pixels）。
+
+### 12.4 任务 3：C-golden 功能 TB 与 Makefile 接入
+
+三个 TB 均为非退化激励 + 逐拍比对（含 tuser/tlast 时序校验）+ 双帧发送（帧间状态残留/计数器不回卷立即暴露）：
+
+| TB | 黄金参考 | 激励图样 | 结果 |
+|---|---|---|---|
+| `tb_sbm_alg1_gaussian.v`（重写，V-2 关闭） | C-golden 两级高斯 [2,7,14,18,14,7,2]/64（BORDER_REPLICATE）逐像素参考 | LFSR/随机非退化图样，覆盖帧首/帧尾/行首/行尾边界 | PASS 32768 |
+| `tb_sbm_alg2_sobel.v`（新建，V-3 关闭） | C-golden dx/dy/mag2/angle（共享 `cordic_atan2_func.vh` 参考函数） | ramp 基底 + 中心 1/4 亮方块（四象限强梯度）+ LCG 噪声 | PASS 32768 |
+| `tb_sbm_alg3_quantize.v`（新建，V-5 关闭） | C-golden 量化方向单热（q16 桶映射、边界清零、3×3 投票、strong 门、votes≥5） | 分区图样：强/弱块、棋盘格（5/4 票边界）、mag2=900/901 交替（阈值边界）、桶回绕、伪随机背景（全 8 方向） | PASS 32768 |
+
+**Makefile 接入**：新增 `run_alg1 / run_alg2 / run_alg3` 并纳入 `all` 目标；PASS/FAIL 校验采用 `$(VVP) $< | tee sim_algN.log` + `grep -q '^PASS' sim_algN.log`（TB 无 `$fatal`，无 PASS 行即 make 非零退出）；`clean` 同步清理新增产物。历史 TB（`tb_sbm_alg2_cosim.v` / `tb_sbm_alg3_cosim.v`）仅做对齐/同义反复验证，功能比对已由新 TB 完全取代。
+
+### 12.5 缺陷捕获与修复总账
+
+闭环过程中 C-golden TB 逐项捕获并驱动修复的实体缺陷（全部先 FAIL 后 PASS）：
+
+| 模块 | 编号 | 缺陷概要 | 捕获 TB |
+|---|---|---|---|
+| alg1 | N-8a | `row_active` 门控吞帧首拍/行首像素 | TB1 |
+| alg1 | N-9 | 行首标记组合判据产生 2 拍宽脉冲，全图错位 | TB1 逐拍探针 |
+| gauss_h | N-8b | 行尾补 3 拍软契约，满速背靠背吞补零拍 | TB1 |
+| alg2 | N-14 | 帧首拍被 `row_active=0` 门控丢弃，整帧左移 1 列 | TB2 |
+| alg2 | N-19 | 行尾补拍软契约，输出相位逐行对角漂移 | TB2（ramp 图样） |
+| alg2 | N-20 | 加法树 ≥512 和 `$signed()` 别名为负 | TB2（ramp 图样） |
+| alg2 | N-22 | 末行 pad 窗口当前行源误用 lb 读 | TB2 |
+| alg2 | N-23 | 帧尾补行行首装载 `win[0]` 错取末行复制 | TB2 |
+| alg2 | N-24 | `out_row` 帧间不回卷，第二帧 tuser 丢失（数据全对仅协议错） | TB2 双帧协议校验 |
+| alg3 | N-14 | 同 alg2，量化方向整体错列 | TB3 |
+| alg3 | N-19 | 行尾补拍软契约（预防性硬件强制） | TB3 |
+| alg3 | N-24 | `out_row` 帧间不回卷 | TB3 双帧协议校验 |
+| alg3 | N-25 | `flush_row` 清除沿吞补行换行拍，末行末列输出永缺 | TB3 |
+| alg3 | N-26 | 标签链与数据路径错位 2 拍，帧尾多发 H-1 拍 | TB3 + 判定点仪表化探针 |
+| alg3 | N-27 | strong 门源错位 1 行 1 列（块边界对角错 577 处） | TB3 错误模式分析 |
+
+**定位方法论沉淀**：手推 beat 级时序多次自相矛盾时（N-25 三次方案迭代失败），改用判定点仪表化（直接打印 `vld_out` 拍的坐标标签与发射判定）与错误坐标模式分析（块边界对角错 → 门源错位），一击定位。
+
+### 12.6 回归结果
+
+`make all` 全量回归（2026-08-18）：既有 7 个目标（run_fix / run_alg9 / run_alg9_multi / run_alg11 / run_alg9_cont / run_alg8 / run_geom）+ 新增 3 个前端 TB 全部 PASS，退出码 0。
+
+```
+PASS: 32768 pixels matched, protocol clean, backpressure observed=1        # run_alg1
+PASS: 32768 pixels (dx/dy/mag2/angle + protocol) matched                  # run_alg2
+PASS: 32768 pixels (quantized dir one-hot + protocol) matched             # run_alg3
+```
+
+至此 §11.8.5 缺陷清单中 **V-2（P0）与 V-3/V-5（P1）全部关闭**，P0 前置项仅剩 D2 与 N-1；前端 alg1→alg3 已具备与后端同级的功能正确性证据。
 
 ---
 

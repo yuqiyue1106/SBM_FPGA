@@ -1,0 +1,2 @@
+PASS: 32768 pixels (quantized dir one-hot + protocol) matched
+tb_sbm_alg3_quantize.v:280: $finish called at 345415000 (1ps)

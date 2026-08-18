@@ -1,0 +1,2 @@
+PASS: 32768 pixels (dx/dy/mag2/angle + protocol) matched
+tb_sbm_alg2_sobel.v:288: $finish called at 345415000 (1ps)
