@@ -192,6 +192,12 @@ always @(posedge clk) begin
 				         m_frame, m_row, m_col, m_axis_tdata, gold);
 		end
 		total = total + 1;
+		// ---- 诊断：帧0首像素(0,0) 三值对照（非破坏性，仅打印） ----
+		// 说明：BORDER_REPLICATE 只复制越界抽头，滤波仍是 7x7 加权求和，
+		// 故角点输出 != 原始输入 属正确模糊结果；TB 从不断言"输入==输出"。
+		if (m_frame == 0 && m_row == 0 && m_col == 0)
+			$display("DIAG (0,0): raw_input=%0d  golden=%0d  dut_out=%0d  -> blur≠input is CORRECT",
+			         img[pidx(0,0,0)], gold, m_axis_tdata);
 		// ---- 输出坐标推进（独立于 DUT 内部计数器） ----
 		if (m_col == IMG_W-1) begin
 			m_col = 0;
