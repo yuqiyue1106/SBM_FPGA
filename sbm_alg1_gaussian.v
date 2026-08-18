@@ -51,20 +51,14 @@ reg [12:0] out_row, out_pix;
 
 // 输入消费 = 纯握手（不被任何行激活窗口门控，N-8a 修复）
 wire w_consume = s_axis_tvalid && s_axis_tready;
-// N-9 修复（TB 逐拍探针定位）：行首标记必须用寄存单拍脉冲，不能由组合
-//   列计数器当场判定——pix_cnt 在 posedge 才更新，组合判据
-//   (pix_cnt==0) 会在行首两拍连续为 1（第 2 拍仍读到旧值 0），
-//   2 拍宽脉冲把下游 gauss_v 的行同步也带偏一拍，全图错位。
-//   改为：消费行末列（或 tuser 帧首拍）时预置 row_start_r，行首拍输出
-//   1，下一拍起自动清 0，脉宽恒 1 拍。
-reg row_start_r;
-always @(posedge clk or negedge rst_n) begin
-	if (!rst_n)
-		row_start_r <= 1'b1;          // 复位后第一帧首拍即行首
-	else if (w_consume)
-		row_start_r <= s_axis_tuser || (pix_cnt == IMG_W-1);
-end
-wire w_row_start = w_consume && row_start_r;
+// N-9 修复（TB 逐拍探针定位）：行首标记须为严格单拍脉冲。
+//   原 row_start_r 寄存器因组合相位会在 col0/col1 连续两拍为 1（2 拍宽脉冲，
+//   曾把下游 gauss_v 的行同步带偏一拍、全图错位）；现改为由内部列计数器在
+//   col==0 直接派生的组合单拍脉冲（pix_cnt 仅该拍为 0，col0 必被消费）。
+// 行首标记改为由内部列计数器在 col==0 直接派生的组合单拍脉冲：
+//   pix_cnt 仅在该拍为 0（col0 必被消费），彻底消除原 row_start_r 寄存器的
+//   组合相位陷阱（col0/col1 连续两拍为 1 的 2 拍宽脉冲，曾带偏 gauss_v 行同步）。
+wire w_row_start = w_consume && (pix_cnt == 13'd0);
 
 always @(posedge clk or negedge rst_n) begin
 	if (!rst_n) begin
