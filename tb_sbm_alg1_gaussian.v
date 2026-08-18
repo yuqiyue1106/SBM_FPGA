@@ -136,7 +136,7 @@ function integer gg(input integer f, r, c);
 	end
 endfunction
 
-// ==================== 驱动器：严格帧协议（tuser=帧首拍，tlast=帧末拍） ====================
+// ==================== 驱动器：AXI Video 帧协议（tuser=帧首拍，tlast=每行末拍） ====================
 // gaps=1 时随机插入 0..3 拍空闲；gaps=0 为满速背靠背
 task send_frame(input integer f, input integer gaps);
 	integer r, c, d;
@@ -150,7 +150,7 @@ task send_frame(input integer f, input integer gaps);
 				end
 				s_axis_tdata  <= img[pidx(f, r, c)];
 				s_axis_tuser  <= (r == 0 && c == 0);
-				s_axis_tlast  <= (r == IMG_H-1 && c == IMG_W-1);
+				s_axis_tlast  <= (c == IMG_W-1);   // AXI Video：每行末拉高，不依赖行号 r
 				s_axis_tvalid <= 1'b1;
 				// 握手等待：tready=0 时保持数据不前进（覆盖底部冲刷反压窗口）
 				do @(posedge clk); while (!s_axis_tready);

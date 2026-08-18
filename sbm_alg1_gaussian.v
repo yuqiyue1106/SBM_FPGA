@@ -2,7 +2,7 @@
 // sbm_alg1_gaussian.v : 高斯平滑IP核顶层（AXI4-Stream封装）
 // 组合 sbm_gauss_h + sbm_gauss_v，输出带tuser/tlast标记
 //
-// N-8 整改（统一 AXI4-Stream 帧协议：tuser=帧首拍、tlast=帧末拍）：
+// 统一 AXI4-Stream 视频协议（Xilinx AXI Video：tuser=帧首拍、tlast=每行末拍）：
 //   ① 删除旧版 row_active 对输入数据消费的门控（N-8a：帧首拍被握手
 //     消费却因 row_active 寄存延迟丢失，每行第 0 像素被吞）。数据消费
 //     仅取决于 AXI-S 握手（s_axis_tvalid && s_axis_tready）。
@@ -10,7 +10,9 @@
 //     s_col 风格对齐），不依赖外部行同步信号；行首标记 = 握手成立且
 //     pix_cnt==0。
 //   ③ 帧首拍（tuser）显式清零计数器与冲刷状态，帧间无状态残留；
-//     帧末拍（tlast）置位底部冲刷状态。
+//     底部冲刷由「末行 tlast」触发：输入 tlast 为本行末拍（AXI Video 标准），
+//     与行计数器 row_cnt 组合，末行末列（row_cnt==IMG_H-1 && tlast）即帧末；
+//     tlast 亦作为行边界对齐校验依据。
 //   ④ gauss_h 行尾补 3 拍经 o_ready 硬件强制行间隙（N-8b），顶层据此
 //     联合拉低 s_axis_tready，背靠背满速送数亦不吞补零拍。
 //   ⑤ 底部冲刷期间（busy_flush）拉低 s_axis_tready，帧间强制 ≥3 行
@@ -28,7 +30,7 @@ module sbm_alg1_gaussian #(
 	output wire       s_axis_tready,
 	input  wire [7:0] s_axis_tdata,
 	input  wire       s_axis_tuser,    ///< 帧首拍（每帧第一个像素同拍为 1）
-	input  wire       s_axis_tlast,    ///< 帧末拍（每帧最后一个像素同拍为 1）
+	input  wire       s_axis_tlast,    ///< 行末拍（AXI Video：每行最后一个像素同拍为 1）
 	output wire       m_axis_tvalid,
 	input  wire       m_axis_tready,
 	output wire [7:0] m_axis_tdata,
@@ -39,7 +41,7 @@ module sbm_alg1_gaussian #(
 // 仅在握手成立（被消费）时推进；tuser 帧首拍清零，天然帧间无状态残留。
 reg [12:0] pix_cnt;   ///< 0..IMG_W-1（行内列计数）
 reg [12:0] row_cnt;   ///< 0..IMG_H-1（帧内行计数，防御性回绕）
-// 底部冲刷状态：帧末拍（tlast）置位；本帧输出排空后清零（反压新帧）
+// 底部冲刷状态：由内部计数器派生的「帧末」置位；本帧输出排空后清零（反压新帧）
 reg        busy_flush;
 // 末行电平指示（gauss_v.i_frame_end）：末行被消费期间置位，
 // 覆盖末行像素穿越水平级的延迟窗口；下一帧 tuser 清零
@@ -118,17 +120,24 @@ sbm_gauss_v #(.IMG_W(IMG_W), .IMG_H(IMG_H)) u_v (
 	.o_data(v_data_out)
 );
 // ==================== 底部冲刷状态机 ====================
-// 帧末拍（tlast）置位；冲刷期间 tready=0 阻塞新帧，
-// 直至底部 3 行冲刷排空（本帧最后一个输出像素发射）
+// 帧末 = 末行 tlast（tlast 每行为行末，末行末列即帧末）；冲刷期间 tready=0
+// 阻塞新帧，直至底部 3 行冲刷排空（本帧最后一个输出像素发射）
 always @(posedge clk or negedge rst_n) begin
 	if (!rst_n)
 		busy_flush <= 1'b0;
-	else if (w_consume && s_axis_tlast)
-		busy_flush <= 1'b1;   // tlast 置位优先（退化单像素帧同拍带 tuser 时仍启动冲刷）
+	else if (w_consume && s_axis_tlast && (row_cnt == IMG_H-1))
+		busy_flush <= 1'b1;   // 帧末 = 末行 tlast（tlast 每行为行末，末行末列即帧末）
 	else if (w_consume && s_axis_tuser)
 		busy_flush <= 1'b0;   // 帧首拍防御性清零（与计数器清零同语义）
 	else if (busy_flush && v_valid_out && (out_row == IMG_H-1) && (out_pix == IMG_W-1))
 		busy_flush <= 1'b0;
+end
+// ==================== 行边界校验（AXI Video：tlast 须每行末拉高） ====================
+// 行边界校验：输入 tlast 须在每个有效行的末列拉高。DUT 内部 pix_cnt 在末列
+// 消费拍的「消费前」值为 IMG_W-2（末列后回卷），故以此为对齐基准。
+always @(posedge clk) begin
+	if (w_consume && s_axis_tlast && (pix_cnt != (IMG_W-2)))
+		$warning("ALG1: tlast off row-end (pix_cnt=%0d exp=%0d)", pix_cnt, IMG_W-2);
 end
 // ==================== 输出坐标跟踪（tuser/tlast 重建） ====================
 always @(posedge clk or negedge rst_n) begin
