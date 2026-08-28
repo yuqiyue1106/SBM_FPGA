@@ -20,17 +20,19 @@
 // 吞吐: 1 像素/时钟；每帧输出 IMG_W×IMG_H 个有效像素，行间无气泡。
 // ==================================================================
 `include "sbm_geometry.vh"
-module sbm_alg1_gaussian #(
-	parameter IMG_W = `SBM_L0_W,
-	parameter IMG_H = `SBM_L0_H
-)(
+module sbm_alg1_gaussian (
 	input  wire       clk,
 	input  wire       rst_n,
+	
+	input  wire [12:0] i_img_w,      ///< 当前图像宽度
+	input  wire [12:0] i_img_h,      ///< 当前图像高度
+
 	input  wire       s_axis_tvalid,
 	output wire       s_axis_tready,
 	input  wire [7:0] s_axis_tdata,
 	input  wire       s_axis_tuser,    ///< 帧首拍（每帧第一个像素同拍为 1）
 	input  wire       s_axis_tlast,    ///< 行末拍（AXI Video：每行最后一个像素同拍为 1）
+	
 	output wire       m_axis_tvalid,
 	input  wire       m_axis_tready,
 	output wire [7:0] m_axis_tdata,
@@ -45,7 +47,6 @@ reg [12:0] row_cnt;   ///< 0..IMG_H-1（帧内行计数，防御性回绕）
 reg        busy_flush;
 // 末行电平指示（gauss_v.i_frame_end）：末行被消费期间置位，
 // 覆盖末行像素穿越水平级的延迟窗口；下一帧 tuser 清零
-reg        frame_last_row;
 // 输出坐标跟踪（tuser/tlast 重建与 busy_flush 清除判定）
 reg [12:0] out_row, out_pix;
 
@@ -65,51 +66,63 @@ always @(posedge clk or negedge rst_n) begin
 		pix_cnt <= 13'd0;
 		row_cnt <= 13'd0;
 	end else if (w_consume) begin
+		/* 
 		if (s_axis_tuser) begin
 			// 帧首拍显式清零：防御上一帧被截断时的状态残留
 			pix_cnt <= 13'd0;
 			row_cnt <= 13'd0;
-		end else if (pix_cnt == IMG_W-1) begin
+		end else
+		*/
+		 if (pix_cnt == i_img_w-1) begin
 			pix_cnt <= 13'd0;
-			row_cnt <= (row_cnt == IMG_H-1) ? 13'd0 : row_cnt + 13'd1;
+			row_cnt <= (row_cnt == i_img_h-1) ? 13'd0 : row_cnt + 13'd1;
 		end else
 			pix_cnt <= pix_cnt + 13'd1;
 	end
 end
 
-always @(posedge clk or negedge rst_n) begin
-	if (!rst_n)
-		frame_last_row <= 1'b0;
-	else if (w_consume && s_axis_tuser)
-		frame_last_row <= 1'b0;   // 新帧起始清零
-	else if (w_consume && (row_cnt == IMG_H-1))
-		frame_last_row <= 1'b1;   // 末行任一像素被消费即置位（含 tlast 拍）
-end
 
 // ==================== 水平级（行尾复制/左边界复制/列丢弃均内置于模块） ====================
 wire       h_valid_out;
 wire       h_row_start;
 wire       h_ready;      ///< 行尾补 3 拍期间为 0（硬件强制行间隙）
 wire [7:0] h_data_out;
-sbm_gauss_h #(.IMG_W(IMG_W)) u_h (
-	.clk(clk), .rst_n(rst_n),
-	.i_valid(w_consume),
+wire       frame_last_row;
+sbm_gauss_h u_h (
+	.clk(clk), 
+	.rst_n(rst_n),
+
+	//
+	.i_img_w(i_img_w),
+	.i_img_h(i_img_h),
+
+	//
 	.i_row_start(w_row_start),
+	.i_valid(w_consume),
 	.i_data(s_axis_tdata),
+
+	//
 	.o_ready(h_ready),
 	.o_valid(h_valid_out),
-	.o_row_start(h_row_start),
-	.o_data(h_data_out)
+	.o_data(h_data_out),
+	.o_frame_last_row(frame_last_row),
+	
+	//
+	.o_row_start(h_row_start)
+	
 );
 // ==================== 垂直级（上/下边界复制内置于模块） ====================
 wire       v_valid_out;
 wire [7:0] v_data_out;
-sbm_gauss_v #(.IMG_W(IMG_W), .IMG_H(IMG_H)) u_v (
+sbm_gauss_v u_v (
 	.clk(clk), .rst_n(rst_n),
+	.i_img_w(i_img_w), .i_img_h(i_img_h),
+
 	.i_valid(h_valid_out),
 	.i_row_start(h_row_start),
 	.i_frame_end(frame_last_row),
 	.i_data(h_data_out),
+
 	.o_valid(v_valid_out),
 	.o_data(v_data_out)
 );
@@ -119,28 +132,28 @@ sbm_gauss_v #(.IMG_W(IMG_W), .IMG_H(IMG_H)) u_v (
 always @(posedge clk or negedge rst_n) begin
 	if (!rst_n)
 		busy_flush <= 1'b0;
-	else if (w_consume && s_axis_tlast && (row_cnt == IMG_H-1))
+	else if (w_consume && s_axis_tlast && (row_cnt == i_img_h-1))
 		busy_flush <= 1'b1;   // 帧末 = 末行 tlast（tlast 每行为行末，末行末列即帧末）
 	else if (w_consume && s_axis_tuser)
 		busy_flush <= 1'b0;   // 帧首拍防御性清零（与计数器清零同语义）
-	else if (busy_flush && v_valid_out && (out_row == IMG_H-1) && (out_pix == IMG_W-1))
+	else if (busy_flush && v_valid_out && (out_row == i_img_h-1) && (out_pix == i_img_w-1))
 		busy_flush <= 1'b0;
 end
 // ==================== 行边界校验（AXI Video：tlast 须每行末拉高） ====================
 // 行边界校验：输入 tlast 须在每个有效行的末列拉高。DUT 内部 pix_cnt 在末列
 // 消费拍的「消费前」值为 IMG_W-2（末列后回卷），故以此为对齐基准。
 always @(posedge clk) begin
-	if (w_consume && s_axis_tlast && (pix_cnt != (IMG_W-2)))
-		$warning("ALG1: tlast off row-end (pix_cnt=%0d exp=%0d)", pix_cnt, IMG_W-2);
+	if (w_consume && s_axis_tlast && (pix_cnt != (i_img_w-2)))
+		$warning("ALG1: tlast off row-end (pix_cnt=%0d exp=%0d)", pix_cnt, i_img_w-2);
 end
 // ==================== 输出坐标跟踪（tuser/tlast 重建） ====================
 always @(posedge clk or negedge rst_n) begin
 	if (!rst_n) begin
 		out_row <= 13'd0; out_pix <= 13'd0;
 	end else if (v_valid_out) begin
-		if (out_pix == IMG_W-1) begin
+		if (out_pix == i_img_w-1) begin
 			out_pix <= 13'd0;
-			out_row <= (out_row == IMG_H-1) ? 13'd0 : out_row + 13'd1;
+			out_row <= (out_row == i_img_h-1) ? 13'd0 : out_row + 13'd1;
 		end else
 			out_pix <= out_pix + 13'd1;
 	end
@@ -150,6 +163,6 @@ assign s_axis_tready = ~busy_flush && h_ready;
 assign m_axis_tvalid = v_valid_out;
 assign m_axis_tdata  = v_data_out;
 assign m_axis_tuser  = v_valid_out && (out_row == 13'd0) && (out_pix == 13'd0);
-assign m_axis_tlast  = v_valid_out && (out_pix == IMG_W-1);
+assign m_axis_tlast  = v_valid_out && (out_pix == i_img_w-1);
 // 输出吞吐恒定，m_axis_tready 仅透传（当前不反压流水线，端口保留）
 endmodule
