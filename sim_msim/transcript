@@ -1,0 +1,27 @@
+# vsim -c -do "run -all; quit -f" work.tb_sbm_alg1_gaussian 
+# Start time: 10:59:21 on Sep 01,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addra'. The port definition is at: ../xpm_memory_sdpram_beh.v(30).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addrb'. The port definition is at: ../xpm_memory_sdpram_beh.v(34).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addra'. The port definition is at: ../xpm_memory_sdpram_beh.v(30).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addrb'. The port definition is at: ../xpm_memory_sdpram_beh.v(34).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addra'. The port definition is at: ../xpm_memory_sdpram_beh.v(30).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addrb'. The port definition is at: ../xpm_memory_sdpram_beh.v(34).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addra'. The port definition is at: ../xpm_memory_sdpram_beh.v(30).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addrb'. The port definition is at: ../xpm_memory_sdpram_beh.v(34).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addra'. The port definition is at: ../xpm_memory_sdpram_beh.v(30).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addrb'. The port definition is at: ../xpm_memory_sdpram_beh.v(34).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addra'. The port definition is at: ../xpm_memory_sdpram_beh.v(30).
+# ** Warning: ../sbm_gauss_v.v(180): (vopt-2241) Connection width does not match width of port 'addrb'. The port definition is at: ../xpm_memory_sdpram_beh.v(34).
+# ** Error (suppressible): ../sbm_alg1_gaussian.v(117): (vopt-2912) Port 'i_img_w' not found in module 'sbm_gauss_v' (3rd connection).
+# ** Error (suppressible): ../sbm_alg1_gaussian.v(117): (vopt-2912) Port 'i_img_h' not found in module 'sbm_gauss_v' (4th connection).
+# ** Error (suppressible): ../sbm_alg1_gaussian.v(91): (vopt-2912) Port 'i_img_w' not found in module 'sbm_gauss_h' (3rd connection).
+# ** Error (suppressible): ../sbm_alg1_gaussian.v(91): (vopt-2912) Port 'i_img_h' not found in module 'sbm_gauss_h' (4th connection).
+# ** Error (suppressible): ../sbm_alg1_gaussian.v(91): (vopt-2912) Port 'o_frame_last_row' not found in module 'sbm_gauss_h' (11th connection).
+# ** Warning: ../tb_sbm_alg1_gaussian.sv(62): (vopt-2241) Connection width does not match width of port 'i_img_w'. The port definition is at: ../sbm_alg1_gaussian.v(27).
+# ** Warning: ../tb_sbm_alg1_gaussian.sv(62): (vopt-2241) Connection width does not match width of port 'i_img_h'. The port definition is at: ../sbm_alg1_gaussian.v(28).
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=5, Warnings=14.
+# Error loading design
+# End time: 10:59:22 on Sep 01,2026, Elapsed time: 0:00:01
+# Errors: 5, Warnings: 14

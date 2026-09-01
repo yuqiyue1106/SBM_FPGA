@@ -1,0 +1,540 @@
+Reading pref.tcl
+
+# 2020.4
+
+# vsim -c -do "run -all; quit -f" work.tb_sbm_alg1_gaussian 
+# Start time: 11:34:05 on Sep 01,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# //  ModelSim SE-64 2020.4 Oct 13 2020
+# //
+# //  Copyright 1991-2020 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  ModelSim SE-64 and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.tb_sbm_alg1_gaussian(fast)
+# run -all
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 1375 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 2685 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 3995 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 5305 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 6615 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 7925 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 9235 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 10545 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 11855 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 13165 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 14475 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 15785 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 17095 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 18405 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 19715 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 21025 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 22335 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 23645 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 24955 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 26265 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 27575 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 28885 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 30195 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 31505 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 32815 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 34125 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 35435 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 36745 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 38055 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 39365 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 40675 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 41985 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 43295 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 44605 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 45915 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 47225 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 48535 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 49845 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 51155 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 52465 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 53775 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 55085 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 56395 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 57705 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 59015 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 60325 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 61635 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 62945 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 64255 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 65565 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 66875 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 68185 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 69495 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 70805 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 72115 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 73425 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 74735 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 76045 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 77355 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 78665 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 79975 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 81285 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 82595 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 83905 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 85215 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 86525 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 87835 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 89145 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 90455 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 91765 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 93075 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 94385 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 95695 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 97005 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 98315 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 99625 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 100935 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 102245 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 103555 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 104865 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 106175 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 107485 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 108795 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 110105 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 111415 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 112725 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 114035 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 115345 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 116655 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 117965 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 119275 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 120585 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 121895 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 123205 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 124515 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 125825 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 127135 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 128445 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 129755 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 131065 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 132375 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 133685 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 134995 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 136305 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 137615 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 138925 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 140235 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 141545 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 142855 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 144165 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 145475 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 146785 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 148095 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 149405 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 150715 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 152025 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 153335 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 154645 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 155955 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 157265 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 158575 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 159885 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 161195 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 162505 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 163815 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 165125 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 166435 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 167745 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 172945 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 174255 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 175565 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 176875 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 178185 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 179495 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 180805 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 182115 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 183425 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 184735 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 186045 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 187355 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 188665 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 189975 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 191285 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 192595 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 193905 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 195215 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 196525 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 197835 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 199145 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 200455 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 201765 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 203075 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 204385 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 205695 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 207005 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 208315 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 209625 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 210935 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 212245 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 213555 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 214865 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 216175 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 217485 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 218795 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 220105 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 221415 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 222725 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 224035 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 225345 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 226655 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 227965 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 229275 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 230585 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 231895 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 233205 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 234515 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 235825 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 237135 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 238445 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 239755 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 241065 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 242375 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 243685 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 244995 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 246305 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 247615 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 248925 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 250235 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 251545 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 252855 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 254165 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 255475 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 256785 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 258095 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 259405 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 260715 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 262025 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 263335 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 264645 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 265955 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 267265 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 268575 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 269885 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 271195 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 272505 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 273815 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 275125 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 276435 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 277745 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 279055 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 280365 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 281675 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 282985 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 284295 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 285605 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 286915 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 288225 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 289535 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 290845 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 292155 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 293465 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 294775 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 296085 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 297395 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 298705 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 300015 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 301325 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 302635 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 303945 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 305255 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 306565 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 307875 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 309185 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 310495 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 311805 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 313115 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 314425 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 315735 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 317045 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 318355 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 319665 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 320975 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 322285 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 323595 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 324905 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 326215 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 327525 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 328835 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 330145 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 331455 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 332765 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 334075 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 335385 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 336695 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 338005 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# ** Warning: ALG1: tlast off row-end (pix_cnt=127 exp=126)
+#    Time: 339315 ns  Scope: tb_sbm_alg1_gaussian.u_dut File: sbm_alg1_gaussian.v Line: 147
+# PASS: 32768 pixels matched, protocol clean, backpressure observed=1
+# ** Note: $finish    : tb_sbm_alg1_gaussian.sv(245)
+#    Time: 351555 ns  Iteration: 1  Instance: /tb_sbm_alg1_gaussian
+# End time: 11:34:06 on Sep 01,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 256

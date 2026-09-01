@@ -1,0 +1,170 @@
+m255
+K4
+z2
+!s11f vlog 2020.4 2020.10, Oct 13 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/yuqiy/Desktop/SBM_FPGA/sim_msim/alg1
+T_opt
+!s110 1788234864
+V_G6_dceedGkUTRI492R0m0
+Z1 04 20 4 work tb_sbm_alg1_gaussian fast 0
+=1-9cb6d03e6aa5-6a964c70-1c9-8a38
+o-quiet -auto_acc_if_foreign -work work
+Z2 tCvgOpt 0
+n@_opt
+Z3 OL;O;2020.4;71
+R0
+T_opt1
+!s110 1788234930
+V;gKH0h5T>abCYH==IzSIc1
+R1
+=1-9cb6d03e6aa5-6a964cb2-1aa-37c0
+o-quiet -auto_acc_if_foreign -work work -debugdb
+R2
+n@_opt1
+R3
+T_opt2
+!s110 1788234396
+V@4<5ZW433PBEdlhb7mfLb0
+R1
+=1-9cb6d03e6aa5-6a964a9c-174-f00
+o-quiet -auto_acc_if_foreign -work work -g IMG_H=128 -g IMG_W=128 +acc
+R2
+n@_opt2
+R3
+R0
+vsbm_alg1_gaussian
+Z4 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z5 !s110 1788234007
+!i10b 1
+!s100 7Y`5]1FdA2kiJmYo599R=0
+Z6 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I5]0[8Uk]^9aeIATMzQfD_0
+S1
+R0
+Z7 w1788233919
+8sbm_alg1_gaussian.v
+Fsbm_alg1_gaussian.v
+!i122 0
+L0 23 146
+Z8 VDg1SIo80bB@j0V0VzS_@n1
+Z9 OL;L;2020.4;71
+r1
+!s85 0
+31
+Z10 !s108 1788234007.000000
+Z11 !s107 sbm_geometry.vh|sbm_alg1_gaussian.v|xpm_memory_sdpram_beh.v|sbm_gauss_v.v|sbm_gauss_h.v|tb_sbm_alg1_gaussian.sv|
+Z12 !s90 -sv|+incdir+.|tb_sbm_alg1_gaussian.sv|sbm_gauss_h.v|sbm_gauss_v.v|xpm_memory_sdpram_beh.v|
+!i113 0
+Z13 o-sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z14 !s92 -sv +incdir+. -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R2
+vsbm_gauss_h
+R4
+R5
+!i10b 1
+!s100 df>U>fd5APY^COYE5jEX_1
+R6
+Im2lN`ROLO=4C8GGT5HgPY1
+S1
+R0
+R7
+8sbm_gauss_h.v
+Fsbm_gauss_h.v
+!i122 0
+L0 32 176
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R14
+R2
+vsbm_gauss_v
+R4
+R5
+!i10b 1
+!s100 mi6^m[]0;gKVJe4o3GJ^43
+R6
+I7P4IlAn9T2MmddhdmMk`T2
+S1
+R0
+R7
+8sbm_gauss_v.v
+Fsbm_gauss_v.v
+!i122 0
+L0 27 559
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R14
+R2
+vtb_sbm_alg1_gaussian
+R4
+R5
+!i10b 1
+!s100 ;I]loii3b>A0C=4C_2MnH3
+R6
+Iz;[OX[KD7e[U<@E2I4XVV0
+S1
+R0
+R7
+8tb_sbm_alg1_gaussian.sv
+Ftb_sbm_alg1_gaussian.sv
+!i122 0
+L0 44 212
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R14
+R2
+vxpm_memory_sdpram
+R4
+R5
+!i10b 1
+!s100 CLez5f_S7zA3Hl@686;Hi2
+R6
+I7Wf4NkXPJ1<TDO4XPgSj[2
+S1
+R0
+R7
+8xpm_memory_sdpram_beh.v
+Fxpm_memory_sdpram_beh.v
+!i122 0
+L0 18 63
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R14
+R2

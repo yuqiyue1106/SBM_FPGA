@@ -1,0 +1,141 @@
+m255
+K4
+z2
+!s11f vlog 2020.4 2020.10, Oct 13 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/yuqiy/Desktop/SBM_FPGA/sim_msim
+vsbm_alg1_gaussian
+Z1 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z2 !s110 1788231546
+!i10b 1
+!s100 7Y`5]1FdA2kiJmYo599R=0
+Z3 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I[knAFIlES82SjHkf?8m_H1
+S1
+R0
+Z4 w1787917891
+8../sbm_alg1_gaussian.v
+F../sbm_alg1_gaussian.v
+!i122 0
+L0 23 146
+Z5 VDg1SIo80bB@j0V0VzS_@n1
+Z6 OL;L;2020.4;71
+r1
+!s85 0
+31
+Z7 !s108 1788231545.000000
+!s107 ../sbm_geometry.vh|../sbm_alg1_gaussian.v|../xpm_memory_sdpram_beh.v|../sbm_gauss_v.v|../sbm_gauss_h.v|../tb_sbm_alg1_gaussian.sv|
+Z8 !s90 -sv|+incdir+..|../tb_sbm_alg1_gaussian.sv|../sbm_gauss_h.v|../sbm_gauss_v.v|../xpm_memory_sdpram_beh.v|
+!i113 0
+Z9 o-sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z10 !s92 -sv +incdir+.. -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z11 tCvgOpt 0
+vsbm_gauss_h
+R1
+R2
+!i10b 1
+!s100 [RUiS<^z1JmODDY;dOPOT0
+R3
+IKdl1ChK?41E=^j@@ZeTcc3
+S1
+R0
+Z12 w1787138222
+8../sbm_gauss_h.v
+F../sbm_gauss_h.v
+!i122 0
+L0 32 118
+R5
+R6
+r1
+!s85 0
+31
+R7
+Z13 !s107 ../sbm_geometry.vh|../sbm_alg1_gaussian.v|../xpm_memory_sdpram_beh.v|../sbm_gauss_v.v|../sbm_gauss_h.v|../tb_sbm_alg1_gaussian.sv|
+R8
+!i113 0
+R9
+R10
+R11
+vsbm_gauss_v
+R1
+R2
+!i10b 1
+!s100 U@W1Q?cZH7VCFEPBcXD1j2
+R3
+IVoA_E<LAeoLFQTMQ?SMM<1
+S1
+R0
+R12
+8../sbm_gauss_v.v
+F../sbm_gauss_v.v
+!i122 0
+L0 25 256
+R5
+R6
+r1
+!s85 0
+31
+R7
+R13
+R8
+!i113 0
+R9
+R10
+R11
+vtb_sbm_alg1_gaussian
+R1
+R2
+!i10b 1
+!s100 ;I]loii3b>A0C=4C_2MnH3
+R3
+I`eolUFH=N_if8gFNHE<;f1
+S1
+R0
+R4
+8../tb_sbm_alg1_gaussian.sv
+F../tb_sbm_alg1_gaussian.sv
+!i122 0
+L0 44 212
+R5
+R6
+r1
+!s85 0
+31
+R7
+R13
+R8
+!i113 0
+R9
+R10
+R11
+vxpm_memory_sdpram
+R1
+R2
+!i10b 1
+!s100 ckaSbNh<ZjzYSz^idJY<M0
+R3
+I9B:g4G7CkBmo2naz_If6O0
+S1
+R0
+R12
+8../xpm_memory_sdpram_beh.v
+F../xpm_memory_sdpram_beh.v
+!i122 0
+L0 18 54
+R5
+R6
+r1
+!s85 0
+31
+R7
+R13
+R8
+!i113 0
+R9
+R10
+R11

@@ -1,0 +1,141 @@
+m255
+K4
+z2
+!s11f vlog 2020.4 2020.10, Oct 13 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/yuqiy/Desktop/SBM_FPGA/sim_msim/nowriteb
+vsbm_alg1_gaussian
+Z1 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z2 !s110 1788235250
+!i10b 1
+!s100 7Y`5]1FdA2kiJmYo599R=0
+Z3 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I5]0[8Uk]^9aeIATMzQfD_0
+S1
+R0
+Z4 w1788235238
+8sbm_alg1_gaussian.v
+Fsbm_alg1_gaussian.v
+!i122 0
+L0 23 146
+Z5 VDg1SIo80bB@j0V0VzS_@n1
+Z6 OL;L;2020.4;71
+r1
+!s85 0
+31
+Z7 !s108 1788235250.000000
+!s107 sbm_geometry.vh|sbm_alg1_gaussian.v|xpm_memory_sdpram_beh.v|sbm_gauss_v.v|sbm_gauss_h.v|tb_sbm_alg1_gaussian.sv|
+Z8 !s90 -sv|+incdir+.|tb_sbm_alg1_gaussian.sv|sbm_gauss_h.v|sbm_gauss_v.v|xpm_memory_sdpram_beh.v|
+!i113 0
+Z9 o-sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z10 !s92 -sv +incdir+. -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z11 tCvgOpt 0
+vsbm_gauss_h
+R1
+R2
+!i10b 1
+!s100 df>U>fd5APY^COYE5jEX_1
+R3
+Im2lN`ROLO=4C8GGT5HgPY1
+S1
+R0
+R4
+8sbm_gauss_h.v
+Fsbm_gauss_h.v
+!i122 0
+L0 32 176
+R5
+R6
+r1
+!s85 0
+31
+R7
+Z12 !s107 sbm_geometry.vh|sbm_alg1_gaussian.v|xpm_memory_sdpram_beh.v|sbm_gauss_v.v|sbm_gauss_h.v|tb_sbm_alg1_gaussian.sv|
+R8
+!i113 0
+R9
+R10
+R11
+vsbm_gauss_v
+R1
+R2
+!i10b 1
+!s100 mi6^m[]0;gKVJe4o3GJ^43
+R3
+I7P4IlAn9T2MmddhdmMk`T2
+S1
+R0
+R4
+8sbm_gauss_v.v
+Fsbm_gauss_v.v
+!i122 0
+L0 27 559
+R5
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 0
+R9
+R10
+R11
+vtb_sbm_alg1_gaussian
+R1
+R2
+!i10b 1
+!s100 ;I]loii3b>A0C=4C_2MnH3
+R3
+Iz;[OX[KD7e[U<@E2I4XVV0
+S1
+R0
+R4
+8tb_sbm_alg1_gaussian.sv
+Ftb_sbm_alg1_gaussian.sv
+!i122 0
+L0 44 212
+R5
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 0
+R9
+R10
+R11
+vxpm_memory_sdpram
+R1
+R2
+!i10b 1
+!s100 ][gLcm>UR1o8g8<Y>0AWb0
+R3
+I?MV?_UY6<oF5dEPKWYF``3
+S1
+R0
+R4
+8xpm_memory_sdpram_beh.v
+Fxpm_memory_sdpram_beh.v
+!i122 0
+L0 18 62
+R5
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 0
+R9
+R10
+R11

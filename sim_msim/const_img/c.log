@@ -1,0 +1,13 @@
+Model Technology ModelSim SE-64 vlog 2020.4 Compiler 2020.10 Oct 13 2020
+Start time: 11:57:32 on Sep 01,2026
+vlog -sv "+incdir+." tb_sbm_alg1_gaussian.sv sbm_gauss_h.v sbm_gauss_v.v xpm_memory_sdpram_beh.v 
+-- Compiling module sbm_alg1_gaussian
+-- Compiling module tb_sbm_alg1_gaussian
+-- Compiling module sbm_gauss_h
+-- Compiling module sbm_gauss_v
+-- Compiling module xpm_memory_sdpram
+
+Top level modules:
+	tb_sbm_alg1_gaussian
+End time: 11:57:32 on Sep 01,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0

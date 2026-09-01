@@ -1,0 +1,14 @@
+# vsim -c -do "run -all; quit -f" work.tb_sbm_alg1_gaussian 
+# Start time: 12:00:51 on Sep 01,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Error (suppressible): sbm_gauss_v.v(416): (vopt-2732) Module parameter 'WRITE_MODE_B' not found for override.
+# ** Error (suppressible): sbm_gauss_v.v(416): (vopt-2732) Module parameter 'WRITE_MODE_B' not found for override.
+# ** Error (suppressible): sbm_gauss_v.v(416): (vopt-2732) Module parameter 'WRITE_MODE_B' not found for override.
+# ** Error (suppressible): sbm_gauss_v.v(416): (vopt-2732) Module parameter 'WRITE_MODE_B' not found for override.
+# ** Error (suppressible): sbm_gauss_v.v(416): (vopt-2732) Module parameter 'WRITE_MODE_B' not found for override.
+# ** Error (suppressible): sbm_gauss_v.v(416): (vopt-2732) Module parameter 'WRITE_MODE_B' not found for override.
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=6, Warnings=0.
+# Error loading design
+# End time: 12:00:52 on Sep 01,2026, Elapsed time: 0:00:01
+# Errors: 6, Warnings: 0

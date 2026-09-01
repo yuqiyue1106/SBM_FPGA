@@ -1,0 +1,156 @@
+m255
+K4
+z2
+!s12c _opt
+Z0 !s99 nomlopt
+!s11f vlog 2024.1 2024.02, Feb  1 2024
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z1 dC:/Users/yuqiy/Desktop/SBM_FPGA/sim_msim/alg1_q
+T_opt
+!s110 1788234361
+Vhn<>3Sg97=JhkGY[kh=:Q3
+04 20 4 work tb_sbm_alg1_gaussian fast 0
+=1-9cb6d03e6aa5-6a964a78-2e9-5398
+R0
+!s12f OEM100
+!s12b OEM100
+!s124 OEM100
+o-quiet -auto_acc_if_foreign -work work -g IMG_H=128 -g IMG_W=128
+Z2 tCvgOpt 0
+n@_opt
+OL;O;2024.1;79
+vsbm_alg1_gaussian
+Z3 2tb_sbm_alg1_gaussian.sv|sbm_gauss_h.v|sbm_gauss_v.v|xpm_memory_sdpram_beh.v
+Z4 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z5 !s110 1788234332
+!i10b 1
+!s100 0H10k3Mmnbh53G@jiZ5Yl0
+IVSHMzSlN]cbOkNiMC7fo;2
+S1
+R1
+Z6 w1788234332
+Fsbm_alg1_gaussian.v
+Z7 Ftb_sbm_alg1_gaussian.sv
+!i122 0
+L0 23 146
+Z8 VDg1SIo80bB@j0V0VzS_@n1
+Z9 OL;L;2024.1;79
+r1
+!s85 0
+31
+Z10 !s108 1788234332.000000
+Z11 !s107 sbm_geometry.vh|sbm_alg1_gaussian.v|xpm_memory_sdpram_beh.v|sbm_gauss_v.v|sbm_gauss_h.v|tb_sbm_alg1_gaussian.sv|
+Z12 !s90 -sv|+incdir+.|tb_sbm_alg1_gaussian.sv|sbm_gauss_h.v|sbm_gauss_v.v|xpm_memory_sdpram_beh.v|
+!i113 0
+Z13 o-sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z14 !s92 -sv +incdir+. -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R2
+vsbm_gauss_h
+R3
+R4
+R5
+!i10b 1
+!s100 df>U>fd5APY^COYE5jEX_1
+I0Z@2^0h_YciW9hRReW[M`3
+S1
+R1
+R6
+8sbm_gauss_h.v
+Fsbm_gauss_h.v
+!i122 0
+L0 32 176
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R14
+R2
+vsbm_gauss_v
+R3
+R4
+R5
+!i10b 1
+!s100 mi6^m[]0;gKVJe4o3GJ^43
+I6c_SjzY5z6[ficc0>Un9c1
+S1
+R1
+R6
+8sbm_gauss_v.v
+Fsbm_gauss_v.v
+!i122 0
+L0 27 559
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R14
+R2
+vtb_sbm_alg1_gaussian
+R3
+R4
+R5
+!i10b 1
+!s100 jElY[EG<F9A2ADgRYaCe43
+I_3Q]Q98m_lPNji[@HCoQZ3
+S1
+R1
+R6
+8tb_sbm_alg1_gaussian.sv
+R7
+!i122 0
+L0 44 212
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R14
+R2
+vxpm_memory_sdpram
+R3
+R4
+R5
+!i10b 1
+!s100 Bf=j2Dg0SWHWLMHOj0fA41
+IE<76RCW4CeD4;HjTVigAG0
+S1
+R1
+R6
+8xpm_memory_sdpram_beh.v
+Fxpm_memory_sdpram_beh.v
+!i122 0
+L0 18 63
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R14
+R2

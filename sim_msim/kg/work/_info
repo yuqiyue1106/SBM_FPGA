@@ -1,0 +1,165 @@
+m255
+K4
+z2
+!s11f vlog 2020.4 2020.10, Oct 13 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/yuqiy/Desktop/SBM_FPGA/sim_msim/kg
+T_opt
+!s110 1788233317
+VI>BQjRSBEn1?=0:bY`@c70
+Z1 04 20 4 work tb_sbm_alg1_gaussian fast 0
+=1-9cb6d03e6aa5-6a964664-261-cb4
+o-quiet -auto_acc_if_foreign -work work -g {C:/Program Files/Git/u_dut/IMG_W=128} -g IMG_H=128 -g {C:/Program Files/Git/u_dut/IMG_H=128} -g IMG_W=128
+Z2 tCvgOpt 0
+n@_opt
+Z3 OL;O;2020.4;71
+R0
+T_opt1
+!s110 1788233331
+VgQmE>maUmI5P1>W=4f9a90
+R1
+=1-9cb6d03e6aa5-6a964672-26e-4128
+o-quiet -auto_acc_if_foreign -work work -g IMG_H=48 -g /u_dut/IMG_W=64 -g /u_dut/IMG_H=48 -g IMG_W=64
+R2
+n@_opt1
+R3
+R0
+T_opt2
+!s110 1788233352
+Vc6zRNm`7_7h]kKn`O3Kan1
+R1
+=1-9cb6d03e6aa5-6a964688-13a-295c
+o-quiet -auto_acc_if_foreign -work work -g IMG_H=48 -g /u_dut/IMG_W=64 -g /u_dut/IMG_H=48 -g IMG_W=64 +acc
+R2
+n@_opt2
+R3
+vsbm_alg1_gaussian
+Z4 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z5 !s110 1788233264
+!i10b 1
+!s100 @>Qb;MEZ3ei93=g`Da>7E2
+Z6 !s11b Dg1SIo80bB@j0V0VzS_@n1
+Iz_AAa2XJ8VLGK6BkJQUBE0
+S1
+R0
+Z7 w1788231836
+8sbm_alg1_gaussian.v
+Fsbm_alg1_gaussian.v
+!i122 0
+L0 23 133
+Z8 VDg1SIo80bB@j0V0VzS_@n1
+Z9 OL;L;2020.4;71
+r1
+!s85 0
+31
+Z10 !s108 1788233264.000000
+Z11 !s107 sbm_geometry.vh|sbm_alg1_gaussian.v|xpm_memory_sdpram_beh.v|sbm_gauss_v.v|sbm_gauss_h.v|tb_sbm_alg1_gaussian.v|
+Z12 !s90 -sv|tb_sbm_alg1_gaussian.v|sbm_gauss_h.v|sbm_gauss_v.v|xpm_memory_sdpram_beh.v|
+!i113 0
+Z13 o-sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R2
+vsbm_gauss_h
+R4
+R5
+!i10b 1
+!s100 [RUiS<^z1JmODDY;dOPOT0
+R6
+IAR5ooAgBX=hTf3jJad[IX1
+S1
+R0
+R7
+8sbm_gauss_h.v
+Fsbm_gauss_h.v
+!i122 0
+L0 32 118
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R2
+vsbm_gauss_v
+R4
+R5
+!i10b 1
+!s100 U@W1Q?cZH7VCFEPBcXD1j2
+R6
+IK?0_N?WoDG4D:FUjBHfOB1
+S1
+R0
+R7
+8sbm_gauss_v.v
+Fsbm_gauss_v.v
+!i122 0
+L0 25 256
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R2
+vtb_sbm_alg1_gaussian
+R4
+R5
+!i10b 1
+!s100 NDZG64>EQ546C_<egbI^H3
+R6
+IfbMzZ=YHTaJ3:k]Da7iCU1
+S1
+R0
+R7
+8tb_sbm_alg1_gaussian.v
+Ftb_sbm_alg1_gaussian.v
+!i122 0
+L0 44 216
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R2
+vxpm_memory_sdpram
+R4
+R5
+!i10b 1
+!s100 dY6aKS6dH6;8BZheMa4dg1
+R6
+I9iJ3hl4DR9VO2OLSW?>CW1
+S1
+R0
+w1788232320
+8xpm_memory_sdpram_beh.v
+Fxpm_memory_sdpram_beh.v
+!i122 0
+L0 18 61
+R8
+R9
+r1
+!s85 0
+31
+R10
+R11
+R12
+!i113 0
+R13
+R2
