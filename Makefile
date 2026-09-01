@@ -123,10 +123,10 @@ run_geom: sim_geom.out
 # --- N-8 前端协议闭环: alg1 两级高斯 C-golden TB ------------------------------
 #  tb 内部 `include sbm_alg1_gaussian.v; 逐行逐字节比对 + tuser/tlast 校验,
 #  任意像素/标记不符 -> FAIL (grep "^PASS" 把关, 无 PASS 即非零退出)
-sim_alg1.out: tb_sbm_alg1_gaussian.v sbm_alg1_gaussian.v sbm_gauss_h.v sbm_gauss_v.v \
+sim_alg1.out: tb_sbm_alg1_gaussian.sv sbm_alg1_gaussian.v sbm_gauss_h.v sbm_gauss_v.v \
 		xpm_memory_sdpram_beh.v sbm_geometry.vh
 	$(IV) -g2012 -o $@ \
-		tb_sbm_alg1_gaussian.v sbm_gauss_h.v sbm_gauss_v.v xpm_memory_sdpram_beh.v
+		tb_sbm_alg1_gaussian.sv sbm_gauss_h.v sbm_gauss_v.v xpm_memory_sdpram_beh.v
 
 run_alg1: sim_alg1.out
 	$(VVP) $< | tee sim_alg1.log
